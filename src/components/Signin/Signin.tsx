@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
+import { REGEX_EMAIL } from "../../models/constants/core.constants";
 
 type SigninProps = {
   onSignin: Function;
@@ -22,7 +23,7 @@ const Signin: React.FC<any> = (props: SigninProps) => {
 
   const onSubmit = (data: any) => {
     props.onSignin(data);
-    reset();
+    // reset();
   };
 
   const getFormErrorMessage = (name: any) => {
@@ -34,7 +35,7 @@ const Signin: React.FC<any> = (props: SigninProps) => {
   return (
     <div className="flex items-center justify-center h-full w-full pr-10">
       <div className="bg-gray-100 rounded-2xl w-full p-10">
-        <div className="text-3xl font-semibold mb-5">Signin</div>
+        <div className="text-3xl font-semibold mb-5">Sign In</div>
         <div>
           <form onSubmit={handleSubmit(onSubmit)} className="p-fluid">
             <div className="mb-5">
@@ -51,7 +52,7 @@ const Signin: React.FC<any> = (props: SigninProps) => {
                   rules={{
                     required: "Email is required.",
                     pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      value: REGEX_EMAIL,
                       message: "Invalid email address. E.g. example@email.com",
                     },
                   }}
@@ -96,7 +97,7 @@ const Signin: React.FC<any> = (props: SigninProps) => {
               {getFormErrorMessage("password")}
             </div>
 
-            <Button type="submit" label="Signin" className="mt-2 bg-teal-500" />
+            <Button type="submit" label="Sign In" className="mt-2 bg-teal-500" />
           </form>
         </div>
         <Divider align="center">

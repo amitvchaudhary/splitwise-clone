@@ -1,4 +1,4 @@
-import { SignupVM } from './../models/classes/auth.classes';
+import { SignInVM, SignupVM } from './../models/classes/auth.classes';
 import { userStore } from './../stores/user/user.store';
 import { User } from "../models/classes/core.classes";
 import { userQuery } from "./../stores/user/user.query";
@@ -12,6 +12,18 @@ export class AuthService {
       AuthService.instance = new AuthService();
     }
     return AuthService.instance;
+  }
+
+  isUserRegistered(data: SignInVM) {
+    const user: User | undefined = userQuery.getEntity(data.email.trim());
+
+    if (user) {
+      if (user.emailId === data.email.trim() && user.password === data.password.trim()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   userExist(email: string) {

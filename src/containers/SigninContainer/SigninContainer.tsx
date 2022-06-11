@@ -1,10 +1,21 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import Signin from "../../components/Signin";
+import { SignInVM } from "../../models/classes/auth.classes";
+import { authService } from "../../services/auth.service";
+import { useCoreService } from "../../services/core.service";
 
 const SigninContainer: React.FC<any> = () => {
   const navigate = useNavigate();
-  const handleSignin = (data: any) => {};
+  const coreService = useCoreService();
+
+  const handleSignin = (data: SignInVM) => {
+    if(authService.isUserRegistered(data)) {
+      console.log('logged in');
+    } else {
+      coreService.showError("Incorrect credentials. Please try again.")
+    }
+  };
 
   const handleSignup = () => {
     navigate("/auth/signup");

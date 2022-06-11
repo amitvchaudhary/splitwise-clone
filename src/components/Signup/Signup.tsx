@@ -6,6 +6,7 @@ import { Button } from "primereact/button";
 import { classNames } from "primereact/utils";
 import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
+import { REGEX_EMAIL } from "../../models/constants/core.constants";
 
 type SignupProps = {
   onSignup: Function;
@@ -90,7 +91,7 @@ const Signup: React.FC<any> = (props: SignupProps) => {
                   rules={{
                     required: "Email is required.",
                     pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      value: REGEX_EMAIL,
                       message: "Invalid email address. E.g. example@email.com",
                     },
                   }}

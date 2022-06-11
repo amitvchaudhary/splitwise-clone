@@ -4,7 +4,6 @@ import Signup from "../../components/Signup";
 import { SignupVM } from "../../models/classes/auth.classes";
 import { authService } from "../../services/auth.service";
 import { useCoreService } from "../../services/core.service";
-import { userService } from "../../services/user.service";
 
 const SignupContainer: React.FC<any> = () => {
   const navigate = useNavigate();
