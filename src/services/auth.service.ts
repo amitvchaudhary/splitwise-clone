@@ -27,9 +27,7 @@ export class AuthService {
   }
 
   userExist(email: string) {
-    console.log(email);
     const user: User | undefined = userQuery.getEntity(email.trim());
-    console.log(user);
     return (user && user?.password) ? true : false;
   }
 
@@ -40,6 +38,18 @@ export class AuthService {
     user.password = signupVM.password.trim();
 
     userStore.upsert(user.emailId, user);
+  }
+
+  setLoggedInUser(email: string) {
+    userStore.setActive(email);
+  }
+
+  isUserLoggedIn() {
+    return userQuery.getActive() ? true : false;
+  }
+
+  getLoggedInUser() {
+    return userQuery.getActive();
   }
 }
 export const authService = AuthService.getInstance();
