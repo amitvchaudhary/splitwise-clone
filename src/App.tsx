@@ -1,13 +1,16 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Button } from "primereact/button";
 import { Outlet } from "react-router";
+// import { globalStore } from "./stores/global";
+// import { userStore } from "./stores/user/user.store";
+// import { User } from "./models/classes/core.classes";
+import { useCoreService } from "./services/core.service";
 
 function App() {
-  return (
-    <Outlet />
-  );
+  const coreService = useCoreService();
+  console.log(coreService);
+  coreService.setupApplication();
+
+  return <Outlet />;
 }
 
 export default App;

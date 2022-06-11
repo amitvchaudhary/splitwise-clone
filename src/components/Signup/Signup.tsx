@@ -22,7 +22,7 @@ const Signup: React.FC<any> = (props: SignupProps) => {
 
   const onSubmit = (data: any) => {
     props.onSignup(data);
-    reset();
+    // reset();
   };
 
   const getFormErrorMessage = (name: any) => {

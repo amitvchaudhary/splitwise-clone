@@ -1,7 +1,7 @@
 import { Currency, SplitMethod } from "./../constants/core.constants";
 
 export class User {
-  emaildId: string = "";
+  emailId: string = "";
   name: string = "";
   password: string = "";
 }
