@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
-import FriendPage from "./FriendPage";
+import FriendPage from "./pages/FriendPage";
 import AuthLayout from "./layouts/AuthLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import DashboardPage from "./pages/DashboardPage";

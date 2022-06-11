@@ -8,10 +8,11 @@ export class User {
   password?: string = "";
   addedByEmailId?: string = ""
 }
-
 export class Group {
   id: ID = guid();
+  name: string = "";
   users: User[] = [];
+  addedByEmailId?: string = ""
 }
 
 export class Activity {
