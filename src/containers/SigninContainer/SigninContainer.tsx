@@ -12,7 +12,7 @@ const SigninContainer: React.FC<any> = () => {
   const handleSignin = (data: SignInVM) => {
     if(authService.isUserRegistered(data)) {
       authService.setLoggedInUser(data.email);
-      // navigate
+      navigate("/home/dashboard");
     } else {
       coreService.showError("Incorrect credentials. Please try again.")
     }
