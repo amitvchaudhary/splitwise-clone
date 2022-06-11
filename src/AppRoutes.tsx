@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
+import FriendPage from "./FriendPage";
 import AuthLayout from "./layouts/AuthLayout";
 import HomeLayout from "./layouts/HomeLayout";
 import DashboardPage from "./pages/DashboardPage";
@@ -29,6 +30,9 @@ export const AppRoutes = () => {
           }
         >
           <Route path="dashboard" element={<DashboardPage />}></Route>
+          <Route path="friends">
+            <Route path=":id" element={<FriendPage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

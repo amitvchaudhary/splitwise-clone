@@ -5,6 +5,7 @@ import { User } from "../models/classes/core.classes";
 import { globalStore } from "../stores/global";
 import { userStore } from "../stores/user/user.store";
 import { Toast } from 'primereact/toast';
+import { groupStore } from "../stores/group/group.store";
 
 let operationsAllowed: any = {};
 const CoreServiceContext = createContext(operationsAllowed);
@@ -54,6 +55,7 @@ export const CoreServiceProvider = (props: any) => {
 
     globalStore.update({isLoading: true});
     userStore.update([]);
+    groupStore.update([]);
   };
 
   const resetStateManagement = () => {

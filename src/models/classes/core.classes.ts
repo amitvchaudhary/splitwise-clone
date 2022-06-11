@@ -1,13 +1,16 @@
 import { Currency, SplitMethod } from "./../constants/core.constants";
+import { ID, guid } from '@datorama/akita';
 
 export class User {
+  id: ID = guid();
   emailId: string = "";
   name: string = "";
-  password: string = "";
+  password?: string = "";
+  addedByEmailId?: string = ""
 }
 
 export class Group {
-  id: number = 0;
+  id: ID = guid();
   users: User[] = [];
 }
 
