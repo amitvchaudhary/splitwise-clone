@@ -48,6 +48,7 @@ const Signin: React.FC<any> = (props: SigninProps) => {
                 </label>
                 <Controller
                   name="email"
+                  defaultValue=""
                   control={control}
                   rules={{
                     required: "Email is required.",

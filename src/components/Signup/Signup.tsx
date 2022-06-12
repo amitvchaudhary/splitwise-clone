@@ -63,6 +63,7 @@ const Signup: React.FC<any> = (props: SignupProps) => {
               </span>
               <Controller
                 name="name"
+                defaultValue=""
                 control={control}
                 rules={{ required: "Name is required." }}
                 render={({ field, fieldState }) => (
@@ -87,6 +88,7 @@ const Signup: React.FC<any> = (props: SignupProps) => {
                 </label>
                 <Controller
                   name="email"
+                  defaultValue=""
                   control={control}
                   rules={{
                     required: "Email is required.",

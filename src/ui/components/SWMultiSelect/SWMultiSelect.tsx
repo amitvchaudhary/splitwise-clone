@@ -8,10 +8,10 @@ type SWMultiSelectProps = {
   displayValue: string;
   placeholder: string;
   identifier: any;
+  className: string;
 };
 
 const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
-  
   const {
     options = [],
     selectedValues = [],
@@ -20,6 +20,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     displayValue,
     placeholder,
     identifier = "id",
+    className,
   } = props;
 
   const inputRef = React.useRef<any>(null);
@@ -28,6 +29,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
   const [showOptions, setShowOptions] = React.useState(false);
   const [searchText, setSearchText] = React.useState("");
   const [optionsMinusSelected, setOptionsMinusSelected] = React.useState([]);
+  const [focus, setFocus] = React.useState(false);
 
   const getOptionsMinusSelectedValues = (options: any, selectedValues: any) => {
     const optionsMinusSelectedLocal: any = options.filter(
@@ -38,7 +40,6 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     );
     return optionsMinusSelectedLocal || [];
   };
-
 
   React.useEffect(() => {
     const optionsMinusSelectedLocal = getOptionsMinusSelectedValues(
@@ -61,16 +62,21 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
 
   const handleSearchTextChange = (e: any) => {
     setSearchText(e.target.value);
-  }
+  };
 
-  const setFocus = () => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }
+  // const setFocus = () => {
+  //   if (inputRef && inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }
+
+  const handleFocus = () => {
+    setShowOptions(true);
+    setFocus(true);
+  };
 
   const handleKeypress = (e: any) => {
-    if(e.key === 'Backspace') {
+    if (e.key === "Backspace") {
       if (!searchText) {
         if (selectedValues && selectedValues.length > 0) {
           handleRemoveOption(selectedValues[selectedValues.length - 1]);
@@ -79,7 +85,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
       }
     }
 
-    if(e.key === 'Enter') {
+    if (e.key === "Enter") {
       if (searchText) {
         if (filteredOptions && filteredOptions.length === 1) {
           handleSelectOption(filteredOptions[0]);
@@ -88,7 +94,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     }
 
     // setFocus();
-  }
+  };
 
   const handleSelectOption = (option: any) => {
     setShowOptions(true);
@@ -103,17 +109,25 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
   const handleOutsideClick = (e: any) => {
     setTimeout(() => {
       setShowOptions(false);
+      setFocus(false);
     }, 150);
   };
 
   return (
-    <div onBlur={handleOutsideClick} className="relative">
-      <div className="w-full p-2 py-3 border rounded-md border-gray-300">
+    <div onBlur={handleOutsideClick}>
+      <div
+        className={`${
+          focus ? "border border-teal-500" : "border border-gray-300"
+        } w-full p-2 py-3  rounded-md  ${className}`}
+      >
         <span className="inline-flex flex-wrap gap-y-2">
           {selectedValues &&
             selectedValues.length > 0 &&
             selectedValues.map((selectedValue: any) => (
-              <span className="bg-teal-500 py-1 px-2 mx-1 rounded-md text-white inline-flex items-center justify-center">
+              <span
+                key={selectedValue[identifier]}
+                className="bg-teal-500 py-1 px-2 mx-1 rounded-md text-white inline-flex items-center justify-center"
+              >
                 <span>{selectedValue[displayValue]}</span>
                 <span
                   onClick={() => handleRemoveOption(selectedValue)}
@@ -127,7 +141,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
             ref={inputRef}
             placeholder={placeholder}
             type="text"
-            onFocus={() => setShowOptions(true)}
+            onFocus={handleFocus}
             value={searchText}
             onChange={handleSearchTextChange}
             className="grow border-0 outline-0 cursor-text"
@@ -137,7 +151,11 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
         </span>
       </div>
       <div
-        className={`w-full max-h-56 overflow--y-auto bg-white border-l border-b border-r border-gray-300 -mt-2 ${
+        className={`${
+          focus
+            ? "border border-teal-500"
+            : "border-l border-b border-r border-gray-300"
+        } w-full max-h-56 overflow-y-auto bg-white   -mt-2 ${
           showOptions || (searchText && searchText.length > 0)
             ? "block"
             : "hidden"
@@ -146,10 +164,10 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
         {filteredOptions && filteredOptions.length === 0 ? (
           <span className="p-2">No items</span>
         ) : (
-          filteredOptions?.map((filteredOption: any, index: number) => (
+          filteredOptions?.map((filteredOption: any) => (
             <div
               className="py-1 px-2 hover:bg-teal-500 hover:text-white cursor-pointer"
-              key={index}
+              key={filteredOption[identifier]}
               onClick={() => handleSelectOption(filteredOption)}
             >
               {filteredOption[displayValue]}

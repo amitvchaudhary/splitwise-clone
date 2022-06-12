@@ -20,32 +20,41 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
 
   const [users, setUsers] = React.useState<any>([]);
   const [selectedValues, setSelectedValues] = React.useState<any>([]);
-  const handleSelectUser = (option: any) => {
-console.log(option);
-setSelectedValues([...selectedValues, option]);
-  }
+  const handleSelectUser = (onChange: any, option: any) => {
+    console.log(option);
+    onChange([...selectedValues, option]);
+    setSelectedValues([...selectedValues, option]);
+  };
 
-  const handleRemoveUser = (option: any) => {
+  const handleRemoveUser = (onChange: any, option: any) => {
     const newSelectedUsers = [...selectedValues];
-    const optionIndex = newSelectedUsers.findIndex((value: any) => value.id === option.id);
-    newSelectedUsers.splice(optionIndex,1);
+    const optionIndex = newSelectedUsers.findIndex(
+      (value: any) => value.id === option.id
+    );
+    newSelectedUsers.splice(optionIndex, 1);
+    onChange(newSelectedUsers);
     setSelectedValues(newSelectedUsers);
-  }
+  };
 
   React.useEffect(() => {
     const userList = userService.getAllUsers();
-    if(userList) {
-      console.log('user list');
+    if (userList) {
+      console.log("user list");
       console.log(userList);
       setUsers(userList);
     }
-  }, [])
+  }, []);
 
   const onSubmit = (data: any) => {
-    console.log('submit');
+    console.log("submit");
     console.log(data);
     props.onAddGroup(data);
     // reset();
+  };
+
+  const validateSelectedUsers = (users: any) => {
+    console.log("validate users");
+    console.log(users);
   };
 
   const getFormErrorMessage = (name: any) => {
@@ -68,6 +77,7 @@ setSelectedValues([...selectedValues, option]);
           </span>
           <Controller
             name="name"
+            defaultValue=""
             control={control}
             rules={{ required: "Name is required." }}
             render={({ field, fieldState }) => (
@@ -75,7 +85,9 @@ setSelectedValues([...selectedValues, option]);
                 id={field.name}
                 {...field}
                 autoFocus
-                className={`${fieldState.invalid && 'p-invalid'} w-full p-inputtext-sm`}
+                className={`${
+                  fieldState.invalid && "p-invalid"
+                } w-full p-inputtext-sm`}
               />
             )}
           />
@@ -84,7 +96,7 @@ setSelectedValues([...selectedValues, option]);
         </div>
 
         <div className="mb-5">
-        <span className="text-gray-600 font-semibold pb-20">
+          <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="users"
               className={classNames({ "p-error": errors.name })}
@@ -92,14 +104,36 @@ setSelectedValues([...selectedValues, option]);
               Users*
             </label>
           </span>
-          <SWMultiSelect placeholder="Select users" onRemove={handleRemoveUser} onSelect={handleSelectUser} options={users} selectedValues={selectedValues} displayValue="name"/>
+          <Controller
+            name="users"
+            control={control}
+            defaultValue={selectedValues}
+            rules={{ required: "At least one user is required." }}
+            render={({ field, fieldState }) => (
+              <SWMultiSelect
+                placeholder="Select users"
+                onRemove={(option: any) =>
+                  handleRemoveUser(field.onChange, option)
+                }
+                onSelect={(option: any) =>
+                  handleSelectUser(field.onChange, option)
+                }
+                options={users}
+                selectedValues={field.value}
+                displayValue="name"
+                className={`${
+                  fieldState.error && "border-red-500"
+                } `}
+              />
+            )}
+          />
+          {getFormErrorMessage("users")}
         </div>
 
         <div className="flex justify-end">
-        <Button type="submit" label="Create" className="mt-2 bg-teal-500" />
+          <Button type="submit" label="Create" className="mt-2 bg-teal-500" />
         </div>
       </form>
-     
     </div>
   );
 };
