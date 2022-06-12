@@ -117,7 +117,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     <div onBlur={handleOutsideClick}>
       <div
         className={`${
-          focus ? "border border-teal-500" : "border border-gray-300"
+          focus ? "border border-teal-500 shadow-2xl shadow-teal-400" : "border border-gray-300"
         } w-full p-2 py-3  rounded-md  ${className}`}
       >
         <span className="inline-flex flex-wrap gap-y-2">
