@@ -19,10 +19,24 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
   } = useForm();
 
   const [users, setUsers] = React.useState<any>([]);
+  const [selectedValues, setSelectedValues] = React.useState<any>([]);
+  const handleSelectUser = (option: any) => {
+console.log(option);
+setSelectedValues([...selectedValues, option]);
+  }
+
+  const handleRemoveUser = (option: any) => {
+    const newSelectedUsers = [...selectedValues];
+    const optionIndex = newSelectedUsers.findIndex((value: any) => value.id === option.id);
+    newSelectedUsers.splice(optionIndex,1);
+    setSelectedValues(newSelectedUsers);
+  }
 
   React.useEffect(() => {
     const userList = userService.getAllUsers();
     if(userList) {
+      console.log('user list');
+      console.log(userList);
       setUsers(userList);
     }
   }, [])
@@ -78,14 +92,14 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
               Users*
             </label>
           </span>
-          <SWMultiSelect options={users} selectedValues={users} displayValue="name"/>
+          <SWMultiSelect placeholder="Select users" onRemove={handleRemoveUser} onSelect={handleSelectUser} options={users} selectedValues={selectedValues} displayValue="name"/>
         </div>
 
         <div className="flex justify-end">
         <Button type="submit" label="Create" className="mt-2 bg-teal-500" />
         </div>
       </form>
-      
+     
     </div>
   );
 };
