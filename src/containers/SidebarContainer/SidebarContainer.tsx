@@ -7,10 +7,10 @@ const SidebarContainer: React.FC<any> = () => {
   return (
     <div className="bg-gray-100 h-full px-4 py-5">
       <div className="flex flex-col gap-y-2">
-        <NavItem to="/home/dashboard">
+        <NavItem to="/dashboard">
           <i className="pi pi-home mr-2"></i>Dashboard
         </NavItem>
-        <NavItem to="/home/expenses">
+        <NavItem to="/expenses">
           <i className="pi pi-list mr-2"></i>All Expenses
         </NavItem>
       </div>

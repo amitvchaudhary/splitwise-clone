@@ -22,7 +22,6 @@ export const AppRoutes = () => {
           <Route path="signin" element={<SigninPage />}></Route>
         </Route>
         <Route
-          path="/home"
           element={
             <ProtectedRoute>
               <HomeLayout />
