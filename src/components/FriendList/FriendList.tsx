@@ -12,7 +12,7 @@ function FriendList(props: FriendListProps) {
   const { friends } = props;
 
   return (
-    <div>
+    <div className="max-h-96 overflow-y-auto">
       {friends && friends.length === 0 ? (
         <div className="w-full flex items-center justify-center text-gray-500">
           Start adding friends.

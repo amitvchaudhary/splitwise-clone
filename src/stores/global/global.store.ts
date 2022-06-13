@@ -7,7 +7,6 @@ export class GlobalStore extends Store<GlobalState> {
 
   constructor() {
     super(createInitialState());
-    console.log('global cons---');
   }
 }
 

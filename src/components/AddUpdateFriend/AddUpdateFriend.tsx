@@ -7,6 +7,7 @@ import { REGEX_EMAIL } from "../../models/constants/core.constants";
 
 type AddUpdateFriendProps = {
   onAddFriend: Function;
+  name?: string;
 };
 
 const AddUpdateFriend: React.FC<any> = (props: AddUpdateFriendProps) => {
@@ -17,11 +18,10 @@ const AddUpdateFriend: React.FC<any> = (props: AddUpdateFriendProps) => {
     reset,
   } = useForm();
 
+  const { onAddFriend, name = ""} = props;
+
   const onSubmit = (data: any) => {
-    console.log('submit');
-    console.log(data);
-    props.onAddFriend(data);
-    // reset();
+    onAddFriend(data);
   };
 
   const getFormErrorMessage = (name: any) => {
@@ -44,6 +44,7 @@ const AddUpdateFriend: React.FC<any> = (props: AddUpdateFriendProps) => {
           </span>
           <Controller
             name="name"
+            defaultValue={name}
             control={control}
             rules={{ required: "Name is required." }}
             render={({ field, fieldState }) => (

@@ -17,8 +17,6 @@ const FriendListContainer = () => {
     let subscription = userService
       .selectAllUsers()
       .subscribe((data: User[]) => {
-        console.log("called again ---");
-        console.log(data);
         setUsers(data);
       });
 

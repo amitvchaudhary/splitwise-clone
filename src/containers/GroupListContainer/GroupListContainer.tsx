@@ -17,8 +17,6 @@ const GroupListContainer: React.FC<any> = () => {
     let subscription = userService
       .selectAllGroups()
       .subscribe((data: Group[]) => {
-        console.log("called again ---");
-        console.log(data);
         setGroups(data);
       });
 

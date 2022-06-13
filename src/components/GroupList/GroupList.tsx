@@ -10,7 +10,7 @@ const GroupList: React.FC<any> = (props: GroupListProps) => {
   const { groups } = props;
 
   return (
-    <div>
+    <div className="overflow-y-auto max-h-96">
       {groups && groups.length === 0 ? (
         <div className="w-full flex items-center justify-center text-gray-500">
           Start making groups.

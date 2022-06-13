@@ -29,6 +29,15 @@ export class UserService {
     });
   }
 
+  getAllGroups() {
+    const loggedInUser: any = this._authService.getLoggedInUser();
+    return groupQuery.getAll({
+      filterBy: [
+        (entity) => entity.addedByEmailId === loggedInUser?.emailId
+      ]
+    });
+  }
+
   selectAllUsers() {
     const loggedInUser: any = this._authService.getLoggedInUser();
     return userQuery.selectAll({
@@ -47,13 +56,14 @@ export class UserService {
     });
   }
 
-  addUser(data: AddFriendVM) {
+  addUser(data: AddFriendVM): User {
     const loggedInUser: any = this._authService.getLoggedInUser();
     const user = new User();
     user.name = data.name;
     user.emailId = data.email;
     user.addedByEmailId = loggedInUser.emailId;
     userStore.add(user);
+    return user;
   }
 
   addGroup(data: AddGroupVM) {
@@ -63,6 +73,13 @@ export class UserService {
     group.addedByEmailId = loggedInUser.emailId;
     group.users = data.users;
     groupStore.add(group);
+  }
+
+  getAllUsersAndGroups() {
+    const users = this.getAllUsers();
+    const groups = this.getAllGroups();
+
+    return [...users, ...groups];
   }
 }
 export const userService = UserService.getInstance();

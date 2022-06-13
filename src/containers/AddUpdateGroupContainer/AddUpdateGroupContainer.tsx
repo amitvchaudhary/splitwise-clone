@@ -10,6 +10,7 @@ type AddUpdateGroupContainerProps = {
 
 const AddUpdateGroupContainer: React.FC<any> = (props: AddUpdateGroupContainerProps) => {
   const coreService = useCoreService();
+  const users = userService.getAllUsers();
 
   const handleAddGroup = (data: AddGroupVM) => {
     userService.addGroup(data);
@@ -17,7 +18,7 @@ const AddUpdateGroupContainer: React.FC<any> = (props: AddUpdateGroupContainerPr
     props.onGroupAdded();
   }
 
-  return <div><AddUpdateGroup onAddGroup={handleAddGroup}/></div>;
+  return <div><AddUpdateGroup onAddGroup={handleAddGroup} users={users} /></div>;
 };
 
 export default AddUpdateGroupContainer;

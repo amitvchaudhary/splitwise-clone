@@ -9,6 +9,8 @@ type SWMultiSelectProps = {
   placeholder: string;
   identifier: any;
   className: string;
+  noItemsPlaceholder?: string;
+  onNoItems?: Function | any;
 };
 
 const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
@@ -21,6 +23,8 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     placeholder,
     identifier = "id",
     className,
+    noItemsPlaceholder = "No Items",
+    onNoItems
   } = props;
 
   const inputRef = React.useRef<any>(null);
@@ -64,6 +68,10 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     setSearchText(e.target.value);
   };
 
+  const handleNoItems = (text: string) => {
+    onNoItems(text);
+  }
+
   // const setFocus = () => {
   //   if (inputRef && inputRef.current) {
   //     inputRef.current.focus();
@@ -89,6 +97,9 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
       if (searchText) {
         if (filteredOptions && filteredOptions.length === 1) {
           handleSelectOption(filteredOptions[0]);
+        } else if (filteredOptions && filteredOptions.length === 0) {
+          handleNoItems(searchText);
+          setSearchText("");
         }
       }
     }
@@ -162,7 +173,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
         }`}
       >
         {filteredOptions && filteredOptions.length === 0 ? (
-          <span className="p-2">No items</span>
+          <span className="p-2">{noItemsPlaceholder}</span>
         ) : (
           filteredOptions?.map((filteredOption: any) => (
             <div

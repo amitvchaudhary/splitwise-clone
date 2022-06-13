@@ -7,7 +7,6 @@ import { useCoreService } from "./services/core.service";
 
 function App() {
   const coreService = useCoreService();
-  console.log(coreService);
   coreService.setupApplication();
 
   return <Outlet />;

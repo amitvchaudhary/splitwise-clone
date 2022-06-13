@@ -3,11 +3,13 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { User } from "../../models/classes/core.classes";
 import { userService } from "../../services/user.service";
 import SWMultiSelect from "../../ui/components/SWMultiSelect";
 
 type AddUpdateGroupProps = {
   onAddGroup: Function;
+  users: User[];
 };
 
 const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
@@ -18,43 +20,23 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
     reset,
   } = useForm();
 
-  const [users, setUsers] = React.useState<any>([]);
-  const [selectedValues, setSelectedValues] = React.useState<any>([]);
-  const handleSelectUser = (onChange: any, option: any) => {
-    console.log(option);
-    onChange([...selectedValues, option]);
-    setSelectedValues([...selectedValues, option]);
+  const {onAddGroup, users = []} = props;
+
+  const handleSelectUser = (field: any, option: any) => {
+    field.onChange([...field.value, option]);
   };
 
-  const handleRemoveUser = (onChange: any, option: any) => {
-    const newSelectedUsers = [...selectedValues];
+  const handleRemoveUser = (field: any, option: any) => {
+    const newSelectedUsers = [...field.value];
     const optionIndex = newSelectedUsers.findIndex(
       (value: any) => value.id === option.id
     );
     newSelectedUsers.splice(optionIndex, 1);
-    onChange(newSelectedUsers);
-    setSelectedValues(newSelectedUsers);
+    field.onChange(newSelectedUsers);
   };
-
-  React.useEffect(() => {
-    const userList = userService.getAllUsers();
-    if (userList) {
-      console.log("user list");
-      console.log(userList);
-      setUsers(userList);
-    }
-  }, []);
 
   const onSubmit = (data: any) => {
-    console.log("submit");
-    console.log(data);
-    props.onAddGroup(data);
-    // reset();
-  };
-
-  const validateSelectedUsers = (users: any) => {
-    console.log("validate users");
-    console.log(users);
+    onAddGroup(data);
   };
 
   const getFormErrorMessage = (name: any) => {
@@ -107,16 +89,16 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
           <Controller
             name="users"
             control={control}
-            defaultValue={selectedValues}
-            rules={{ required: "At least one user is required." }}
+            defaultValue={[]}
+            rules={{ required: "At least one friend is required." }}
             render={({ field, fieldState }) => (
               <SWMultiSelect
                 placeholder="Select users"
                 onRemove={(option: any) =>
-                  handleRemoveUser(field.onChange, option)
+                  handleRemoveUser(field, option)
                 }
                 onSelect={(option: any) =>
-                  handleSelectUser(field.onChange, option)
+                  handleSelectUser(field, option)
                 }
                 options={users}
                 selectedValues={field.value}
