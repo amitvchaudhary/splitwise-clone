@@ -5,6 +5,8 @@ import * as React from "react";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { Group, User } from "../../models/classes/core.classes";
 import SWMultiSelect from "../../ui/components/SWMultiSelect";
+import { InputNumber } from "primereact/inputnumber";
+import { Chips } from 'primereact/chips';
 
 type UserOrGroup = User | Group;
 
@@ -29,36 +31,40 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
 
   React.useEffect(() => {
     if (addedUser) {
-
-      const usersOrGroupsLocal = getValues("usersOrGroups");
-      if(!userExist(addedUser, usersOrGroupsLocal)) {
-        setValue("usersOrGroups", [...usersOrGroupsLocal, addedUser]);
+      const usersAndGroupsLocal = getValues("usersAndGroups");
+      if (!userExist(addedUser, usersAndGroupsLocal)) {
+        setValue("usersAndGroups", [...usersAndGroupsLocal, addedUser]);
       }
     }
   }, [addedUser?.id]);
 
   const userExist = (user: User, usersAndGroupsLocal: Array<UserOrGroup>) => {
     if (user) {
-      return usersAndGroupsLocal.findIndex((item: UserOrGroup) => item.id === user.id) >= 0; 
+      return (
+        usersAndGroupsLocal.findIndex(
+          (item: UserOrGroup) => item.id === user.id
+        ) >= 0
+      );
     }
-  }
+  };
 
   const getFormErrorMessage = (name: any) => {
     return (
       errors[name] && <small className="p-error">{errors[name].message}</small>
     );
   };
+
   const handleSelectUserOrGroup = (field: any, option: any) => {
     field.onChange([...field.value, option]);
   };
 
   const handleRemoveUserOrGroup = (field: any, option: any) => {
-    const newSelectedUsersOrGroups = [...field.value];
-    const optionIndex = newSelectedUsersOrGroups.findIndex(
+    const newSelectedUsersAndGroups = [...field.value];
+    const optionIndex = newSelectedUsersAndGroups.findIndex(
       (value: any) => value.id === option.id
     );
-    newSelectedUsersOrGroups.splice(optionIndex, 1);
-    field.onChange(newSelectedUsersOrGroups);
+    newSelectedUsersAndGroups.splice(optionIndex, 1);
+    field.onChange(newSelectedUsersAndGroups);
   };
 
   const handleAddUser = (text: string) => {
@@ -73,19 +79,19 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   };
 
   return (
-    <div className="flex items-center h-full w-full">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+    <div className="flex items-center h-full w-full p-fluid">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
         <div className="mb-5">
           <span className="text-gray-600 font-semibold pb-20">
             <label
-              htmlFor="usersOrGroups"
+              htmlFor="usersAndGroups"
               className={classNames({ "p-error": errors.name })}
             >
               Split with you and*
             </label>
           </span>
           <Controller
-            name="usersOrGroups"
+            name="usersAndGroups"
             control={control}
             defaultValue={[]}
             rules={{ required: "At least one friend is required." }}
@@ -103,41 +109,99 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
                 options={usersAndGroups}
                 selectedValues={field.value}
                 displayValue="name"
-                className={`${fieldState.error && "border-red-500"} `}
+                isError={fieldState.error}
               />
             )}
           />
-          {getFormErrorMessage("users")}
+          {getFormErrorMessage("usersAndGroups")}
         </div>
         <div className="mb-5">
           <span className="text-gray-600 font-semibold pb-20">
             <label
-              htmlFor="name"
+              htmlFor="amount"
               className={classNames({ "p-error": errors.name })}
             >
-              Name*
+              Amount*
             </label>
           </span>
           <Controller
-            name="name"
+            name="amount"
+            defaultValue={0.0}
+            rules={{ min: {value: 0.1, message: "Please enter some amount"} }}
+            control={control}
+            render={({ field, fieldState }) => (
+              <InputNumber
+                inputId={field.name}
+                className={`${
+                  fieldState.error && "p-invalid"
+                } w-full p-inputtext-sm`}
+                value={field.value}
+                onValueChange={(e) => field.onChange(e.value)}
+                mode="currency"
+                currency="INR"
+                currencyDisplay="code"
+                locale="en-IN"
+                min={0}
+              />
+            )}
+          />
+
+          {getFormErrorMessage("amount")}
+        </div>
+        <div className="mb-5">
+          <span className="text-gray-600 font-semibold pb-20">
+            <label
+              htmlFor="description"
+              className={classNames({ "p-error": errors.name })}
+            >
+              Description
+            </label>
+          </span>
+          <Controller
+            name="description"
             defaultValue=""
             control={control}
-            rules={{ required: "Name is required." }}
             render={({ field, fieldState }) => (
               <InputText
                 id={field.name}
                 {...field}
-                autoFocus
                 className={`${
-                  fieldState.invalid && "p-invalid"
+                  fieldState?.error && "p-invalid"
                 } w-full p-inputtext-sm`}
               />
             )}
           />
 
-          {getFormErrorMessage("name")}
+          {getFormErrorMessage("description")}
         </div>
 
+      
+        <div className="mb-5">
+          <span className="text-gray-600 font-semibold pb-20">
+            <label
+              htmlFor="tags"
+              className={classNames({ "p-error": errors.name })}
+            >
+              Tags
+            </label>
+          </span>
+          <Controller
+            name="tags"
+            defaultValue=""
+   
+            control={control}
+            render={({ field, fieldState }) => (
+              <Chips  id={field.name}
+              allowDuplicate={false}
+              {...field}
+              className={`${
+                fieldState?.error && "p-invalid"
+              } w-full`}></Chips>
+            )}
+          />
+
+          {getFormErrorMessage("tags")}
+        </div>
         <div className="flex justify-end">
           <Button type="submit" label="Create" className="mt-2 bg-teal-500" />
         </div>

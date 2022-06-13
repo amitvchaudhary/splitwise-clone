@@ -103,9 +103,7 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
                 options={users}
                 selectedValues={field.value}
                 displayValue="name"
-                className={`${
-                  fieldState.error && "border-red-500"
-                } `}
+                isError={fieldState.error}
               />
             )}
           />

@@ -11,6 +11,7 @@ type SWMultiSelectProps = {
   className: string;
   noItemsPlaceholder?: string;
   onNoItems?: Function | any;
+  isError: boolean;
 };
 
 const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
@@ -24,7 +25,8 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
     identifier = "id",
     className,
     noItemsPlaceholder = "No Items",
-    onNoItems
+    onNoItems,
+    isError = false
   } = props;
 
   const inputRef = React.useRef<any>(null);
@@ -127,9 +129,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
   return (
     <div onBlur={handleOutsideClick}>
       <div
-        className={`${
-          focus ? "border border-teal-500 shadow-2xl shadow-teal-400" : "border border-gray-300"
-        } w-full p-2 py-3  rounded-md  ${className}`}
+        className={`${isError ? 'border border-red-500' : (focus ? "border border-teal-500 shadow-2xl shadow-teal-400" : "border border-gray-300")} w-full p-2 py-3  rounded-md  ${className}`}
       >
         <span className="inline-flex flex-wrap gap-y-2">
           {selectedValues &&

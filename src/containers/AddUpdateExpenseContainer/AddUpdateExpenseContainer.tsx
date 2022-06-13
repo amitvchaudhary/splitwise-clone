@@ -3,6 +3,7 @@ import * as React from "react";
 import AddUpdateExpense from "../../components/AddUpdateExpense";
 import AddUpdateFriend from "../../components/AddUpdateFriend";
 import { User } from "../../models/classes/core.classes";
+import { ExpenseVM } from "../../models/classes/expense.classes";
 import { userService } from "../../services/user.service";
 import AddUpdateFriendContainer from "../AddUpdateFriendContainer";
 
@@ -14,7 +15,6 @@ const AddUpdateExpenseContainer: React.FC<any> = (
   props: AddUpdateExpenseContainerProps
 ) => {
   const { onExpenseAdded } = props;
-  // const usersAndGroups = userService.getAllUsersAndGroups();
   const [addFriendDialog, setAddFriendDialog] = React.useState(false);
   const [name, setName] = React.useState("");
   const [usersAndGroups, setUsersAndGroups] = React.useState(
@@ -22,9 +22,6 @@ const AddUpdateExpenseContainer: React.FC<any> = (
   );
   const [addedUser, setAddedUser] = React.useState<User>();
 
-  // React.useEffect(() => {
-
-  // },[name])
 
   const handleAddFriend = (text: string) => {
     console.log("main ");
@@ -40,12 +37,18 @@ const AddUpdateExpenseContainer: React.FC<any> = (
     setAddedUser(user);
   };
 
+  const handleAddExpense = (expenseVM: ExpenseVM) => {
+    console.log('add expense--');
+    console.log(expenseVM);
+  }
+
   return (
     <div>
       <AddUpdateExpense
         usersAndGroups={usersAndGroups}
         onAddUser={handleAddFriend}
         addedUser={addedUser}
+        onAddExpense={handleAddExpense}
       />
       <Dialog
         visible={addFriendDialog}
