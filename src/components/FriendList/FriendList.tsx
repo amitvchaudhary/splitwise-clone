@@ -21,7 +21,7 @@ function FriendList(props: FriendListProps) {
         <div className="flex flex-col gap-y-2">
           {friends && friends.map((friend: User) => (
             <NavItem key={friend.id} to={`friends/${friend.id}`}>
-              <i className="pi pi-user mr-2"></i>
+               <i className={`${friend.iconClass} mr-2`}></i>
               {friend.name}
             </NavItem>
           ))}

@@ -20,7 +20,7 @@ const GroupList: React.FC<any> = (props: GroupListProps) => {
           {groups &&
             groups.map((group: Group) => (
               <NavItem key={group.id} to={`groups/${group.id}`}>
-                <i className="pi pi-tag mr-2"></i>
+                <i className={`${group.iconClass} mr-2`}></i>
                 {group.name}
               </NavItem>
             ))}

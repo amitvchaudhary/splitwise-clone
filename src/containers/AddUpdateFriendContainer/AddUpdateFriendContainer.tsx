@@ -14,7 +14,7 @@ const AddUpdateFriendContainer: React.FC<any> = (props: AddUpdateFriendContainer
 
   const handleAddFriend = (data: AddFriendVM) => {
     userService.addUser(data);
-    coreService.showSuccess(data.name + ' added successfully.');
+    coreService.showSuccess(data.name + ' user added successfully.');
     props.onFriendAdded();
   }
 

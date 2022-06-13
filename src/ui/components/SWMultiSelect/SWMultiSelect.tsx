@@ -128,7 +128,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
                 key={selectedValue[identifier]}
                 className="bg-teal-500 py-1 px-2 mx-1 rounded-md text-white inline-flex items-center justify-center"
               >
-                <span>{selectedValue[displayValue]}</span>
+                <span> <i className={`${selectedValue['iconClass']} mr-2 `}></i>{selectedValue[displayValue]}</span>
                 <span
                   onClick={() => handleRemoveOption(selectedValue)}
                   className="ml-2 rounded-full h-4 w-4 pb-3 px-3 flex items-center justify-center p-2 text-gray-600 font-semibold bg-white cursor-pointer"
@@ -170,7 +170,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
               key={filteredOption[identifier]}
               onClick={() => handleSelectOption(filteredOption)}
             >
-              {filteredOption[displayValue]}
+              <i className={`${filteredOption['iconClass']} mr-2 `}></i>{filteredOption[displayValue]}
             </div>
           ))
         )}

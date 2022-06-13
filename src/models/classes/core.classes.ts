@@ -7,12 +7,14 @@ export class User {
   name: string = "";
   password?: string = "";
   addedByEmailId?: string = ""
+  iconClass: string ="pi pi-user"
 }
 export class Group {
   id: ID = guid();
   name: string = "";
   users: User[] = [];
-  addedByEmailId?: string = ""
+  addedByEmailId?: string = "";
+  iconClass: string ="pi pi-tag"
 }
 
 export class Activity {

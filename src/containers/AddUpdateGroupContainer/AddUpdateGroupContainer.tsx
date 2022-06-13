@@ -13,7 +13,7 @@ const AddUpdateGroupContainer: React.FC<any> = (props: AddUpdateGroupContainerPr
 
   const handleAddGroup = (data: AddGroupVM) => {
     userService.addGroup(data);
-    coreService.showSuccess(data.name + ' created successfully.');
+    coreService.showSuccess(data.name + ' group created successfully.');
     props.onGroupAdded();
   }
 
