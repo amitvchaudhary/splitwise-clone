@@ -81,7 +81,7 @@ const AddUpdateGroup: React.FC<any> = (props: AddUpdateGroupProps) => {
           <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="users"
-              className={classNames({ "p-error": errors.name })}
+              className={classNames({ "p-error": errors.users })}
             >
               Users*
             </label>

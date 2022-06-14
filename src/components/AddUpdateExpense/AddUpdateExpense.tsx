@@ -85,7 +85,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="usersAndGroups"
-              className={classNames({ "p-error": errors.name })}
+              className={classNames({ "p-error": errors.usersAndGroups })}
             >
               Split with you and*
             </label>
@@ -119,7 +119,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="amount"
-              className={classNames({ "p-error": errors.name })}
+              className={classNames({ "p-error": errors.amount })}
             >
               Amount*
             </label>
@@ -152,7 +152,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="description"
-              className={classNames({ "p-error": errors.name })}
+              className={classNames({ "p-error": errors.description })}
             >
               Description
             </label>
@@ -180,7 +180,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <span className="text-gray-600 font-semibold pb-20">
             <label
               htmlFor="tags"
-              className={classNames({ "p-error": errors.name })}
+              className={classNames({ "p-error": errors.tags })}
             >
               Tags
             </label>
