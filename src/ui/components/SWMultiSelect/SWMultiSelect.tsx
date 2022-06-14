@@ -173,7 +173,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
         }`}
       >
         {filteredOptions && filteredOptions.length === 0 ? (
-          <span className="p-2">{noItemsPlaceholder}</span>
+          <span className="p-2">{searchText.trim().length > 0 ? noItemsPlaceholder : "No Items"}</span>
         ) : (
           filteredOptions?.map((filteredOption: any) => (
             <div

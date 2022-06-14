@@ -3,10 +3,19 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import * as React from "react";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
-import { Group, User } from "../../models/classes/core.classes";
+import {
+  Expense,
+  Group,
+  User,
+  UserExpense,
+} from "../../models/classes/core.classes";
 import SWMultiSelect from "../../ui/components/SWMultiSelect";
 import { InputNumber } from "primereact/inputnumber";
-import { Chips } from 'primereact/chips';
+import { Chips } from "primereact/chips";
+import { useImmer } from "use-immer";
+import { expenseService } from "../../services/expense.service";
+import { OverlayPanel } from "primereact/overlaypanel";
+import ChoosePayer from "../ChoosePayer";
 
 type UserOrGroup = User | Group;
 
@@ -15,11 +24,19 @@ type AddUpdateExpenseProps = {
   onAddUser: Function;
   usersAndGroups: Array<UserOrGroup>;
   addedUser: User;
+  loggedInUser: User;
+  draftExpense: Expense;
 };
 
 const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
-  const { onAddExpense, onAddUser, usersAndGroups, addedUser } = props;
-
+  const {
+    onAddExpense,
+    onAddUser,
+    usersAndGroups,
+    addedUser,
+    loggedInUser,
+    draftExpense,
+  } = props;
   const {
     control,
     formState: { errors },
@@ -27,8 +44,13 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     reset,
     setValue,
     getValues,
+    watch,
   } = useForm();
-
+  const [expense, updateExpense] = useImmer(draftExpense);
+  const payersRef: any = React.useRef();
+  const watchUsersAndGroups = watch("usersAndGroups");
+  console.log("initial");
+  console.log(draftExpense);
   React.useEffect(() => {
     if (addedUser) {
       const usersAndGroupsLocal = getValues("usersAndGroups");
@@ -37,6 +59,18 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
       }
     }
   }, [addedUser?.id]);
+
+  React.useEffect(() => {
+    updateExpense((draft) => {
+      const updatedList = expenseService.getUpdatedSharedWith(
+        watchUsersAndGroups,
+        expense.sharedWith
+      );
+      if (updatedList) {
+        draft.sharedWith = updatedList;
+      }
+    });
+  }, [watchUsersAndGroups]);
 
   const userExist = (user: User, usersAndGroupsLocal: Array<UserOrGroup>) => {
     if (user) {
@@ -71,6 +105,16 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     onAddUser(text);
   };
 
+  const whoPaid = (paidByUsers: UserExpense[]) => {
+    return expenseService.getPaidBy(paidByUsers);
+  };
+
+  const closeChoosePayer = () => {
+    if(payersRef && payersRef.current) {
+      payersRef.current.hide();
+    }
+  }
+
   const onSubmit = (data: any) => {
     console.log("submit");
     console.log(data);
@@ -79,8 +123,8 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   };
 
   return (
-    <div className="flex items-center h-full w-full p-fluid">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full ">
+    <div className="flex items-center flex-col h-full w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full p-fluid">
         <div className="mb-5">
           <span className="text-gray-600 font-semibold pb-20">
             <label
@@ -127,7 +171,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <Controller
             name="amount"
             defaultValue={0.0}
-            rules={{ min: {value: 0.1, message: "Please enter some amount"} }}
+            rules={{ min: { value: 0.1, message: "Please enter some amount" } }}
             control={control}
             render={({ field, fieldState }) => (
               <InputNumber
@@ -175,7 +219,6 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           {getFormErrorMessage("description")}
         </div>
 
-      
         <div className="mb-5">
           <span className="text-gray-600 font-semibold pb-20">
             <label
@@ -188,19 +231,30 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           <Controller
             name="tags"
             defaultValue=""
-   
             control={control}
             render={({ field, fieldState }) => (
-              <Chips  id={field.name}
-              allowDuplicate={false}
-              {...field}
-              className={`${
-                fieldState?.error && "p-invalid"
-              } w-full`}></Chips>
+              <Chips
+                id={field.name}
+                allowDuplicate={false}
+                {...field}
+                className={`${fieldState?.error && "p-invalid"} w-full`}
+              ></Chips>
             )}
           />
 
           {getFormErrorMessage("tags")}
+        </div>
+        <div className="mb-5">
+          <span>Paid by</span>
+          <span
+            className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer"
+            onClick={(e) => payersRef?.current.toggle(e)}
+          >
+            {whoPaid(expense.paidBy)}
+          </span>
+          <OverlayPanel ref={payersRef}>
+            <ChoosePayer onClose={closeChoosePayer} expense={expense} updateExpense={updateExpense} />
+          </OverlayPanel>
         </div>
         <div className="flex justify-end">
           <Button type="submit" label="Create" className="mt-2 bg-teal-500" />

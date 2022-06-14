@@ -4,6 +4,8 @@ import AddUpdateExpense from "../../components/AddUpdateExpense";
 import AddUpdateFriend from "../../components/AddUpdateFriend";
 import { User } from "../../models/classes/core.classes";
 import { ExpenseVM } from "../../models/classes/expense.classes";
+import { authService } from "../../services/auth.service";
+import { expenseService } from "../../services/expense.service";
 import { userService } from "../../services/user.service";
 import AddUpdateFriendContainer from "../AddUpdateFriendContainer";
 
@@ -21,6 +23,8 @@ const AddUpdateExpenseContainer: React.FC<any> = (
     userService.getAllUsersAndGroups()
   );
   const [addedUser, setAddedUser] = React.useState<User>();
+  const loggedInUser = authService.getLoggedInUser();
+  const draftExpense = expenseService.createDraftExpense();
 
 
   const handleAddFriend = (text: string) => {
@@ -49,6 +53,8 @@ const AddUpdateExpenseContainer: React.FC<any> = (
         onAddUser={handleAddFriend}
         addedUser={addedUser}
         onAddExpense={handleAddExpense}
+        loggedInUser={loggedInUser}
+        draftExpense={draftExpense}
       />
       <Dialog
         visible={addFriendDialog}

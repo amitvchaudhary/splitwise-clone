@@ -121,6 +121,7 @@ const Signup: React.FC<any> = (props: SignupProps) => {
                 <Controller
                   name="password"
                   control={control}
+                  defaultValue=""
                   rules={{ required: "Password is required." }}
                   render={({ field, fieldState }) => (
                     <Password

@@ -81,5 +81,19 @@ export class UserService {
 
     return [...users, ...groups];
   }
+
+  userExist(friend: AddFriendVM) {
+    const users = this.getAllUsers();
+    if (users && friend && friend.email) {
+      return users.findIndex((user: User) => user.emailId === friend.email.trim()) >= 0;
+    }
+  }
+
+  groupExist(group: AddGroupVM) {
+    const groups = this.getAllGroups();
+    if (groups && group && group.name.trim()) {
+      return groups.findIndex((groupLocal: Group) => groupLocal.name.trim().toLowerCase() === group.name.trim().toLowerCase()) >= 0;
+    }
+  }
 }
 export const userService = UserService.getInstance();

@@ -70,6 +70,7 @@ const AddUpdateFriend: React.FC<any> = (props: AddUpdateFriendProps) => {
             </label>
             <Controller
               name="email"
+              defaultValue=""
               control={control}
               rules={{
                 required: "Email is required.",
