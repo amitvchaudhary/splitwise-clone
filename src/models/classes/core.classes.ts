@@ -1,4 +1,5 @@
-import { Currency, SplitMethod } from "./../constants/core.constants";
+import { SPLIT_METHOD } from './../enums/core.enums';
+import { Currency } from "./../constants/core.constants";
 import { ID, guid } from '@datorama/akita';
 import {immerable} from "immer";
 
@@ -46,7 +47,7 @@ export class Expense {
   addedByEmailId?: string = ""; // LoggedIn user
   money: Money = new Money();
   description: string = "";
-  splitMethod: string = SplitMethod.EQUALLY.value;
+  splitMethod: string = SPLIT_METHOD.EQUALLY;
   createdAt: Date = new Date();
   tags: string[] = [];
   sharedWith: UserExpense[] = [];

@@ -16,6 +16,7 @@ import { useImmer } from "use-immer";
 import { expenseService } from "../../services/expense.service";
 import { OverlayPanel } from "primereact/overlaypanel";
 import ChoosePayer from "../ChoosePayer";
+import { whichSplitMethod } from "../../utils/helpers";
 
 type UserOrGroup = User | Group;
 
@@ -46,11 +47,12 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     getValues,
     watch,
   } = useForm();
-  const [expense, updateExpense] = useImmer(draftExpense);
+  const [expense, updateExpense] = useImmer<Expense>(draftExpense);
   const payersRef: any = React.useRef();
   const watchUsersAndGroups = watch("usersAndGroups");
   console.log("initial");
   console.log(draftExpense);
+
   React.useEffect(() => {
     if (addedUser) {
       const usersAndGroupsLocal = getValues("usersAndGroups");
@@ -109,11 +111,13 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     return expenseService.getPaidBy(paidByUsers);
   };
 
+
+
   const closeChoosePayer = () => {
-    if(payersRef && payersRef.current) {
+    if (payersRef && payersRef.current) {
       payersRef.current.hide();
     }
-  }
+  };
 
   const onSubmit = (data: any) => {
     console.log("submit");
@@ -252,8 +256,14 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
           >
             {whoPaid(expense.paidBy)}
           </span>
+          <span>and split</span>
+          <span className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer">{whichSplitMethod(expense.splitMethod)}</span>
           <OverlayPanel ref={payersRef}>
-            <ChoosePayer onClose={closeChoosePayer} expense={expense} updateExpense={updateExpense} />
+            <ChoosePayer
+              onClose={closeChoosePayer}
+              expense={expense}
+              updateExpense={updateExpense}
+            />
           </OverlayPanel>
         </div>
         <div className="flex justify-end">
