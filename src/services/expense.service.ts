@@ -279,5 +279,9 @@ export class ExpenseService {
 
     return userLocal;
   }
+
+  deleteExpense(expense: any){
+    expenseStore.remove(expense.id);
+  }
 }
 export const expenseService = ExpenseService.getInstance();

@@ -3,17 +3,13 @@ import { Outlet } from "react-router-dom";
 import HeaderContainer from "../../containers/HeaderContainer";
 import SidebarContainer from "../../containers/SidebarContainer";
 
-type HomeLayoutProps = {
-  //
-};
-
 const HomeLayout: React.FC<any> = () => {
   return (
     <div className="h-screen flex flex-col">
       <HeaderContainer />
       <div className="flex h-full w-full">
         <div className="w-72 h-full overflow-y-auto"><SidebarContainer /></div>
-        <div className="w-full h-full">
+        <div className="w-full h-full shadow-xl">
           <Outlet />
         </div>
       </div>

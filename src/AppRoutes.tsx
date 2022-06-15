@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SigninPage from "./pages/SigninPage";
 import SignupPage from "./pages/SignupPage";
 import { authService } from "./services/auth.service";
+import ExpensesPage from "./pages/ExpensesPage";
 
 function ProtectedRoute({ children }: any) {
   let isUserLoggedIn = authService.isUserLoggedIn();
@@ -29,9 +30,11 @@ export const AppRoutes = () => {
           }
         >
           <Route path="dashboard" element={<DashboardPage />}></Route>
+          <Route path="expenses" element={<ExpensesPage />}></Route>
           <Route path="friends">
             <Route path=":id" element={<FriendPage />} />
           </Route>
+          <Route path="*" element={<Navigate to="/auth/signup"></Navigate>}></Route>
         </Route>
       </Route>
     </Routes>

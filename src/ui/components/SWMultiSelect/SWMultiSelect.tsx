@@ -142,10 +142,11 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
                 <span> <i className={`${selectedValue['iconClass']} mr-2 `}></i>{selectedValue[displayValue]}</span>
                 <span
                   onClick={() => handleRemoveOption(selectedValue)}
-                  className="ml-2 rounded-full h-4 w-4 pb-3 px-3 flex items-center justify-center p-2 text-gray-600 font-semibold bg-white cursor-pointer"
+                  className="ml-2 rounded-full h-6 w-6  flex items-center justify-center p-1 text-gray-600 font-semibold bg-white cursor-pointer"
                 >
-                  x
+                  <i className="pi pi-times text-xs"></i>
                 </span>
+                
               </span>
             ))}
           <input

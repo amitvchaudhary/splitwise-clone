@@ -13,7 +13,7 @@ const Header: React.FC<any> = (props: HeaderProps) => {
 
   return (
     <div className="h-16 w-full bg-teal-500 flex items-center justify-center">
-      <div className="max-w-4xl px-10 w-full flex justify-between items-center">
+      <div className="px-4 w-full flex justify-between items-center">
         <div>
           <img src={Logo} className="h-10 w-10" />
         </div>
