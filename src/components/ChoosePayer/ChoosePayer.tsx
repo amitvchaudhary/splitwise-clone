@@ -12,10 +12,11 @@ const ChoosePayer: React.FC<any> = (props: ChoosePayerProps) => {
   const { expense, updateExpense, onClose } = props;
 
 
-  const handlePaidBy = (user: UserExpense, paidByMultiple: boolean = false) => {
+  const handlePaidBy = (user: UserExpense, amount: number) => {
     if (user) {
       updateExpense((draftExpense: Expense) => {
         draftExpense.paidBy = [user];
+        draftExpense.paidBy[0].amount = amount;
       });
       onClose();
     }
@@ -36,7 +37,7 @@ const ChoosePayer: React.FC<any> = (props: ChoosePayerProps) => {
                 "bg-gray-100"
               } py-1 px-4 hover:bg-gray-100 text-gray-700 cursor-pointer`}
               key={sharedWith.user.id}
-              onClick={() => handlePaidBy(sharedWith)}
+              onClick={() => handlePaidBy(sharedWith, expense.money.value)}
             >
               <i className={`${sharedWith.user["iconClass"]} mr-2 `}></i>
               {sharedWith?.user?.name}

@@ -23,7 +23,7 @@ const ExpenseSummary: React.FC<any> = (props: ExpenseSummaryProps) => {
               : "text-red-500"
           }`}
         >
-          {Currency.INR.symbol}{youAreOwed - youOwe}
+          {Currency.INR.symbol}{(youAreOwed - youOwe).toFixed(2)}
         </div>
       </span>
       <span className="flex flex-col justify-center items-center">

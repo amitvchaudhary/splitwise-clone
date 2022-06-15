@@ -1,7 +1,10 @@
 import { Button } from "primereact/button";
 import * as React from "react";
 import Moment from "react-moment";
-import { Expense } from "../../models/classes/core.classes";
+import { Expense, UserExpense } from "../../models/classes/core.classes";
+import { Currency } from "../../models/constants/core.constants";
+import { SPLIT_METHOD } from "../../models/enums/core.enums";
+import { expenseService } from "../../services/expense.service";
 
 type ExpenseItemProps = {
   expense: Expense;
@@ -12,6 +15,18 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
   const { expense, onDelete } = props;
   const handleDelete = (expense: Expense) => {
     onDelete(expense);
+  };
+
+  const whoPaid = (paidByUsers: UserExpense[]) => {
+    return expenseService.getPaidBy(paidByUsers);
+  };
+
+  const paidAmount = (expenseLocal: Expense) => {
+    return expenseService.paidAmount(
+      expenseLocal.splitMethod,
+      expenseLocal.money,
+      expenseLocal.paidBy[0].amount
+    );
   };
 
   return (
@@ -29,6 +44,17 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
       </div>
       <div className="flex items-center">
         <div>
+          <div className="text-gray-500">
+            <span>{whoPaid(expense.paidBy)}</span>
+            <span className="ml-1">paid</span>
+          </div>
+          <div className="text-xl font-semibold">
+            <span>{Currency.INR.symbol}</span>
+            <span>{paidAmount(expense)}</span>
+          </div>
+        </div>
+        <div></div>
+        <div className="ml-4">
           <Button
             id="delete_btn"
             onClick={() => handleDelete(expense)}

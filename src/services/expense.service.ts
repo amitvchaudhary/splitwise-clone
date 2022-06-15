@@ -47,6 +47,14 @@ export class ExpenseService {
     }
   }
 
+  paidAmount(splitMethod: string, money: Money, amount: number) {
+    if (splitMethod === SPLIT_METHOD.PERCENTAGE) {
+      return expenseService.getAmountByPercentage(money.value, amount);
+    } else {
+      return amount;
+    }
+  }
+
   getPaidBy(userExpenses: UserExpense[]) {
     if (userExpenses && userExpenses.length > 0) {
       const loggedInUser: User | any = this._authService.getLoggedInUser();
@@ -164,11 +172,6 @@ export class ExpenseService {
             // You are owed
             if (expense.sharedWith && expense.sharedWith.length > 0) {
               expense.sharedWith.forEach((sharedWith: UserExpense) => {
-                // if (expense.splitMethod === SPLIT_METHOD.EQUALLY) {
-                //   if (!sharedWith.isSelected) {
-                //     return;
-                //   } 
-                // }
 
                 // Except you (logged in user) all other people owe you
                 if (sharedWith.user.emailId !== loggedInUser.emailId) {
@@ -184,9 +187,8 @@ export class ExpenseService {
                   }
 
                   userExpenseSummary.expenses.push(expense);
-                  userExpenseSummary.totalAmount += sharedWith.amount;
-
-                  expenseSummary.youAreOwed += sharedWith.amount;
+                  userExpenseSummary.totalAmount += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
+                  expenseSummary.youAreOwed += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
                   
                 }
               });
@@ -213,10 +215,8 @@ export class ExpenseService {
                   }
 
                   userExpenseSummary.expenses.push(expense);
-                  userExpenseSummary.totalAmount += sharedWith.amount;
-
-                  expenseSummary.youOwe += sharedWith.amount;
-               
+                  userExpenseSummary.totalAmount += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
+                  expenseSummary.youOwe += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
                 }
               });
             }
@@ -225,6 +225,10 @@ export class ExpenseService {
       });
       return expenseSummary;
     }
+  }
+
+  getAmountByPercentage(amount: number, percentage: number) {
+    return (amount * percentage) / 100;
   }
 
   userExistInExpense(

@@ -10,7 +10,7 @@ type ExpenseSummaryListProps = {
 
 const ExpenseSummaryList: React.FC<any> = (props: ExpenseSummaryListProps) => {
 
-  const {youOweUsers, youAreOwedUsers} = props;
+  const {youOweUsers = [], youAreOwedUsers = []} = props;
 
   return <div className="w-full grid grid-cols-2 gap-4">
     <div>

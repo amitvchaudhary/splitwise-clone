@@ -87,6 +87,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   React.useEffect(() => {
     updateExpense((draft: Expense) => {
       draft.money.value = watchAmount;
+      draft.paidBy[0].amount = watchAmount;
       const updatedList = expenseService.distributeExpense(
         expense.splitMethod,
         draft.money,
