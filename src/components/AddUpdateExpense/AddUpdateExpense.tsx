@@ -206,6 +206,10 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
                 currencyDisplay="code"
                 locale="en-IN"
                 min={0}
+                showButtons
+                buttonLayout="horizontal"
+                incrementButtonClassName="bg-teal-500"
+                decrementButtonClassName="bg-teal-500"
               />
             )}
           />
@@ -258,7 +262,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
                 id={field.name}
                 allowDuplicate={false}
                 {...field}
-                className={`${fieldState?.error && "p-invalid"} w-full`}
+                className={`${fieldState?.error && "p-invalid"} w-full h-11`}
               ></Chips>
             )}
           />

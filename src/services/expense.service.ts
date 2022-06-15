@@ -89,7 +89,7 @@ export class ExpenseService {
     switch (splitMethod) {
       case SPLIT_METHOD.EQUALLY:
         return this.distributeExpenseEqually(money, sharedWith);
-      default: return []
+      default: return sharedWith;
     }
   }
 
@@ -99,8 +99,6 @@ export class ExpenseService {
     const selectedUsers = sharedWithLocal.filter(
       (userExpense: UserExpense) => userExpense.isSelected
     );
-    // console.log(money.value);
-    // console.log
 
     if (money && money.value > 0 && sharedWithLocal.length > 0) {
       console.log('3');

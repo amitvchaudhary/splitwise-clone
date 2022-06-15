@@ -1,6 +1,5 @@
 import { Checkbox } from "primereact/checkbox";
 import * as React from "react";
-import { useImmer } from "use-immer";
 import { Expense, UserExpense } from "../../models/classes/core.classes";
 import { expenseService } from "../../services/expense.service";
 
@@ -11,15 +10,11 @@ type SplitEquallyProps = {
 
 const SplitEqually: React.FC<any> = (props: SplitEquallyProps) => {
   const { expense, updateExpense } = props;
-  // const [sharedWith, updateSharedWith] = useImmer(expense.sharedWith
 
   const handleSelectUser = (index: number) => {
     console.log(index);
     console.log(expense);
     updateExpense((draft: Expense) => {
-      // console.log('update');
-      // console.log(index);
-      // console.log(draft.sharedWith[index].user);
       draft.sharedWith[index].isSelected = !draft.sharedWith[index].isSelected;
       const updatedList = expenseService.distributeExpense(expense.splitMethod, draft.money, draft.sharedWith);
       if (updatedList) {

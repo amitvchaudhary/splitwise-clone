@@ -6,6 +6,8 @@ import { useImmer } from "use-immer";
 import { Checkbox } from "primereact/checkbox";
 import SplitEqually from "../SplitEqually";
 import { expenseService } from "../../services/expense.service";
+import SplitByExactAmount from "../SplitByExactAmount";
+import SplitByPercentage from "../SplitByPercentage";
 
 type ChooseSplitOptionsProps = {
   expense: Expense;
@@ -25,21 +27,39 @@ const ChooseSplitOptions: React.FC<any> = (props: ChooseSplitOptionsProps) => {
   const handleSplitMethodChange = (value: string) => {
     updateExpense((draft: Expense) => {
       draft.splitMethod = value;
+      if (draft.splitMethod === SPLIT_METHOD.EQUALLY) {
+        const updatedList = expenseService.distributeExpense(
+          draft.splitMethod,
+          draft.money,
+          draft.sharedWith
+        );
+        if (updatedList) {
+          draft.sharedWith = updatedList;
+        }
+      }
     });
   };
 
   const renderSplitMethod = (splitMethod: string) => {
     if (splitMethod === SPLIT_METHOD.EQUALLY) {
       return <SplitEqually expense={expense} updateExpense={updateExpense} />;
+    } else if (splitMethod === SPLIT_METHOD.EXACT_AMOUNT) {
+      return (
+        <SplitByExactAmount expense={expense} updateExpense={updateExpense} />
+      );
+    } else if (splitMethod === SPLIT_METHOD.PERCENTAGE) {
+      return (
+        <SplitByPercentage expense={expense} updateExpense={updateExpense} />
+      );
     }
   };
 
   return (
-    <div className="w-72">
+    <div className="w-80">
       <div className="w-full flex items-center justify-center">
         <SelectButton
           optionLabel="name"
-          className=""
+          className="p-button-sm"
           value={expense.splitMethod}
           options={splitMethodOptions}
           onChange={(e) => handleSplitMethodChange(e.value)}
