@@ -36,7 +36,8 @@ export class Money {
 export class UserExpense {
   [immerable] = true;
   user: User = new User();
-  value: number = 0;
+  amount: number = 0;
+  isSelected: boolean = true;
 }
 
 export class Expense {

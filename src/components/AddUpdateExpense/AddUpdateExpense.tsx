@@ -17,6 +17,7 @@ import { expenseService } from "../../services/expense.service";
 import { OverlayPanel } from "primereact/overlaypanel";
 import ChoosePayer from "../ChoosePayer";
 import { whichSplitMethod } from "../../utils/helpers";
+import ChooseSplitOptions from "../ChooseSplitOptions";
 
 type UserOrGroup = User | Group;
 
@@ -49,7 +50,9 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   } = useForm();
   const [expense, updateExpense] = useImmer<Expense>(draftExpense);
   const payersRef: any = React.useRef();
+  const splitMethodRef: any = React.useRef();
   const watchUsersAndGroups = watch("usersAndGroups");
+  const watchAmount = watch("amount");
   console.log("initial");
   console.log(draftExpense);
 
@@ -64,15 +67,28 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
 
   React.useEffect(() => {
     updateExpense((draft) => {
-      const updatedList = expenseService.getUpdatedSharedWith(
+      let updatedList = expenseService.getUpdatedSharedWith(
         watchUsersAndGroups,
         expense.sharedWith
       );
+
+      updatedList = expenseService.distributeExpense(expense.splitMethod, expense.money, updatedList);
       if (updatedList) {
         draft.sharedWith = updatedList;
       }
     });
   }, [watchUsersAndGroups]);
+
+  React.useEffect(() => {
+    updateExpense((draft: Expense) => {
+      draft.money.value = watchAmount;
+      const updatedList = expenseService.distributeExpense(expense.splitMethod, draft.money, expense.sharedWith);
+      if (updatedList) {
+        draft.sharedWith = updatedList;
+      }
+
+    })
+  }, [watchAmount]);
 
   const userExist = (user: User, usersAndGroupsLocal: Array<UserOrGroup>) => {
     if (user) {
@@ -202,13 +218,14 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
               htmlFor="description"
               className={classNames({ "p-error": errors.description })}
             >
-              Description
+              Description*
             </label>
           </span>
           <Controller
             name="description"
             defaultValue=""
             control={control}
+            rules={{required: "Please enter description"}}
             render={({ field, fieldState }) => (
               <InputText
                 id={field.name}
@@ -257,9 +274,16 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
             {whoPaid(expense.paidBy)}
           </span>
           <span>and split</span>
-          <span className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer">{whichSplitMethod(expense.splitMethod)}</span>
+          <span onClick={(e) => splitMethodRef?.current.toggle(e)} className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer">{whichSplitMethod(expense.splitMethod)}</span>
           <OverlayPanel ref={payersRef}>
             <ChoosePayer
+              onClose={closeChoosePayer}
+              expense={expense}
+              updateExpense={updateExpense}
+            />
+          </OverlayPanel>
+          <OverlayPanel ref={splitMethodRef}>
+            <ChooseSplitOptions
               onClose={closeChoosePayer}
               expense={expense}
               updateExpense={updateExpense}
