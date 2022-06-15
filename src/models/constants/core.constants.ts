@@ -5,7 +5,7 @@ export const REGEX_EMAIL = new RegExp(
 export const Currency = {
   "INR": {
     value: "INR",
-    symbol: "Rs.",
+    symbol: "₹",
   },
   "USD": {
     value: "USD",

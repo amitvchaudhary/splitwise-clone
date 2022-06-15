@@ -58,7 +58,7 @@ const SWMultiSelect: React.FC<any> = (props: SWMultiSelectProps) => {
   React.useEffect(() => {
     if (searchText && searchText.trim()) {
       const filteredOptionsMinusSelected: any = optionsMinusSelected.filter(
-        (option: any) => option[displayValue]?.indexOf(searchText) !== -1
+        (option: any) => option[displayValue]?.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
       );
       setFilteredOptions(filteredOptionsMinusSelected);
     } else {

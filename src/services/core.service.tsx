@@ -35,7 +35,7 @@ export const CoreServiceProvider = (props: any) => {
     // }
 
     persistStorage = persistState({
-      include: ["global", "user", "group"],
+      include: ["global", "user", "group", "expense"],
     //   preStorageUpdate(storeName, state) {
     //     // This function is called before storing data into local storgage.
     //     if (simpleCrypto) {

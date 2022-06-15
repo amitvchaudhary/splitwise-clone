@@ -70,8 +70,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   React.useEffect(() => {
     updateExpense((draft) => {
       let updatedList = expenseService.getUpdatedSharedWith(
-        watchUsersAndGroups,
-        expense.sharedWith
+        watchUsersAndGroups
       );
 
       updatedList = expenseService.distributeExpense(

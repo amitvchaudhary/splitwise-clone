@@ -1,18 +1,32 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import * as React from "react";
+import ExpenseSummary from "../../components/ExpenseSummary";
+import ExpenseSummaryList from "../../components/ExpenseSummaryList";
+// import { ExpenseSummary as ExpenseSummaryVM} from "../../models/classes/expense.classes";
 import { useCoreService } from "../../services/core.service";
+import { expenseService } from "../../services/expense.service";
+import { expenseQuery } from "../../stores/expense/expense.query";
 import AddUpdateExpenseContainer from "../AddUpdateExpenseContainer";
-import ExpenseSummaryContainer from "../ExpenseSummaryContainer";
 
 type DashboardContainerProps = {
   //
 };
 
 const DashboardContainer: React.FC<any> = () => {
-
   const [addExpenseDialog, setAddExpenseDialog] = React.useState(false);
+  const [expenseSummary, setExpenseSummary] = React.useState<any>(null);
   const coreService = useCoreService();
+
+  React.useEffect(() => {
+    let subscription = expenseQuery.selectAll().subscribe(() => {
+      console.log("subs called ---");
+
+      setExpenseSummary(expenseService.getExpenseSummary());
+      console.log(expenseSummary);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleAddExpense = () => {
     setAddExpenseDialog(true);
@@ -23,7 +37,7 @@ const DashboardContainer: React.FC<any> = () => {
   const handleExpenseAdded = () => {
     coreService.showSuccess("Expense added successfully.");
     setAddExpenseDialog(false);
-  }
+  };
 
   return (
     <div>
@@ -43,7 +57,14 @@ const DashboardContainer: React.FC<any> = () => {
         </span>
       </div>
       <div>
-        <ExpenseSummaryContainer />
+        <ExpenseSummary
+          youOwe={expenseSummary?.youOwe}
+          youAreOwed={expenseSummary?.youAreOwed}
+        />
+        <ExpenseSummaryList
+          youOweUsers={expenseSummary?.youOweUsers}
+          youAreOwedUsers={expenseSummary?.youAreOwedUsers}
+        />
       </div>
       <Dialog
         visible={addExpenseDialog}
@@ -52,7 +73,7 @@ const DashboardContainer: React.FC<any> = () => {
         style={{ width: "50vw" }}
         header="Add an expense"
       >
-        <AddUpdateExpenseContainer onExpenseAdded={handleExpenseAdded}/>
+        <AddUpdateExpenseContainer onExpenseAdded={handleExpenseAdded} />
       </Dialog>
     </div>
   );
