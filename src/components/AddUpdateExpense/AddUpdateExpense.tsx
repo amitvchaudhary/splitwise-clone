@@ -18,6 +18,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import ChoosePayer from "../ChoosePayer";
 import { whichSplitMethod } from "../../utils/helpers";
 import ChooseSplitOptions from "../ChooseSplitOptions";
+import { react } from "@babel/types";
 
 type UserOrGroup = User | Group;
 
@@ -48,13 +49,14 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     getValues,
     watch,
   } = useForm();
+
   const [expense, updateExpense] = useImmer<Expense>(draftExpense);
   const payersRef: any = React.useRef();
   const splitMethodRef: any = React.useRef();
   const watchUsersAndGroups = watch("usersAndGroups");
   const watchAmount = watch("amount");
-  console.log("initial");
-  console.log(draftExpense);
+  const watchDescription = watch("description");
+  const watchTags = watch("tags");
 
   React.useEffect(() => {
     if (addedUser) {
@@ -72,7 +74,11 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
         expense.sharedWith
       );
 
-      updatedList = expenseService.distributeExpense(expense.splitMethod, expense.money, updatedList);
+      updatedList = expenseService.distributeExpense(
+        expense.splitMethod,
+        expense.money,
+        updatedList
+      );
       if (updatedList) {
         draft.sharedWith = updatedList;
       }
@@ -82,13 +88,28 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   React.useEffect(() => {
     updateExpense((draft: Expense) => {
       draft.money.value = watchAmount;
-      const updatedList = expenseService.distributeExpense(expense.splitMethod, draft.money, expense.sharedWith);
+      const updatedList = expenseService.distributeExpense(
+        expense.splitMethod,
+        draft.money,
+        expense.sharedWith
+      );
       if (updatedList) {
         draft.sharedWith = updatedList;
       }
-
-    })
+    });
   }, [watchAmount]);
+
+  React.useEffect(() => {
+    updateExpense((draft: Expense) => {
+      draft.tags = watchTags;
+    });
+  }, [watchTags]);
+
+  React.useEffect(() => {
+    updateExpense((draft: Expense) => {
+      draft.description = watchDescription;
+    });
+  }, [watchDescription]);
 
   const userExist = (user: User, usersAndGroupsLocal: Array<UserOrGroup>) => {
     if (user) {
@@ -127,8 +148,6 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     return expenseService.getPaidBy(paidByUsers);
   };
 
-
-
   const closeChoosePayer = () => {
     if (payersRef && payersRef.current) {
       payersRef.current.hide();
@@ -138,7 +157,8 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   const onSubmit = (data: any) => {
     console.log("submit");
     console.log(data);
-    onAddExpense(data);
+
+    onAddExpense(expense);
     // reset();
   };
 
@@ -229,7 +249,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
             name="description"
             defaultValue=""
             control={control}
-            rules={{required: "Please enter description"}}
+            rules={{ required: "Please enter description" }}
             render={({ field, fieldState }) => (
               <InputText
                 id={field.name}
@@ -278,7 +298,12 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
             {whoPaid(expense.paidBy)}
           </span>
           <span>and split</span>
-          <span onClick={(e) => splitMethodRef?.current.toggle(e)} className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer">{whichSplitMethod(expense.splitMethod)}</span>
+          <span
+            onClick={(e) => splitMethodRef?.current.toggle(e)}
+            className="bg-teal-500 border border-dashed border-white px-2 pb-1 text-white rounded-lg mx-1 cursor-pointer"
+          >
+            {whichSplitMethod(expense.splitMethod)}
+          </span>
           <OverlayPanel ref={payersRef}>
             <ChoosePayer
               onClose={closeChoosePayer}

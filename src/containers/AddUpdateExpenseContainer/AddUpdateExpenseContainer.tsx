@@ -1,9 +1,7 @@
 import { Dialog } from "primereact/dialog";
 import * as React from "react";
 import AddUpdateExpense from "../../components/AddUpdateExpense";
-import AddUpdateFriend from "../../components/AddUpdateFriend";
-import { User } from "../../models/classes/core.classes";
-import { ExpenseVM } from "../../models/classes/expense.classes";
+import { Expense, User } from "../../models/classes/core.classes";
 import { authService } from "../../services/auth.service";
 import { expenseService } from "../../services/expense.service";
 import { userService } from "../../services/user.service";
@@ -26,10 +24,7 @@ const AddUpdateExpenseContainer: React.FC<any> = (
   const loggedInUser = authService.getLoggedInUser();
   const draftExpense = expenseService.createDraftExpense();
 
-
   const handleAddFriend = (text: string) => {
-    console.log("main ");
-    console.log(text);
     setName(text);
     setAddFriendDialog(true);
   };
@@ -41,9 +36,11 @@ const AddUpdateExpenseContainer: React.FC<any> = (
     setAddedUser(user);
   };
 
-  const handleAddExpense = (expenseVM: ExpenseVM) => {
-    console.log('add expense--');
-    console.log(expenseVM);
+  const handleAddExpense = (expense: Expense) => {
+    if (expense) {
+      expenseService.addExpense(expense);
+      onExpenseAdded();
+    }
   }
 
   return (

@@ -19,12 +19,6 @@ const ChoosePayer: React.FC<any> = (props: ChoosePayerProps) => {
       });
       onClose();
     }
-    // else if (paidByMultiple) {
-    //   updateExpense((draftExpense: Expense) => {
-    //     draftExpense.paidBy=draftExpense.sharedWith;
-    //     draftExpense.paidByMultiple = true;
-    //   });
-    // }
   };
 
   return (

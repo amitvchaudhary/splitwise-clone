@@ -1,11 +1,11 @@
 import { akitaDevtools, persistState, resetStores } from "@datorama/akita";
 import React, { createContext, useContext, useRef } from "react";
 import SimpleCrypto from "simple-crypto-js";
-import { User } from "../models/classes/core.classes";
 import { globalStore } from "../stores/global";
 import { userStore } from "../stores/user/user.store";
 import { Toast } from 'primereact/toast';
 import { groupStore } from "../stores/group/group.store";
+import { expenseStore } from "../stores/expense/expense.store";
 
 let operationsAllowed: any = {};
 const CoreServiceContext = createContext(operationsAllowed);
@@ -56,6 +56,7 @@ export const CoreServiceProvider = (props: any) => {
     globalStore.update({isLoading: true});
     userStore.update([]);
     groupStore.update([]);
+    expenseStore.update([]);
   };
 
   const resetStateManagement = () => {

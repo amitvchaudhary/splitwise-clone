@@ -6,6 +6,7 @@ import {
   UserExpense,
 } from "../models/classes/core.classes";
 import { authService, AuthService } from "./auth.service";
+import { expenseStore } from "../stores/expense/expense.store";
 
 export class ExpenseService {
   private static instance: ExpenseService;
@@ -34,6 +35,15 @@ export class ExpenseService {
     return draftExpense;
   }
 
+  addExpense(expense: Expense) {
+    if (expense) {
+      const loggedInUser: User | any = this._authService.getLoggedInUser();
+      const expenseLocal = JSON.parse(JSON.stringify(expense));
+      expenseLocal.addedByEmailId = loggedInUser.emailId;
+      expenseStore.add(expenseLocal);
+    }
+  }
+
   getPaidBy(userExpenses: UserExpense[]) {
     if (userExpenses && userExpenses.length > 0) {
       const loggedInUser: User | any = this._authService.getLoggedInUser();
@@ -56,13 +66,9 @@ export class ExpenseService {
     sharedWithList.push(this.convertUserToUserExpense(loggedInUser));
 
     if (splitters && splitters.length > 0) {
-      console.log("getupdated======");
-      console.log(splitters);
-      console.log(sharedWith);
       splitters.forEach((splitter: any) => {
         if (splitter.users && splitter.users.length > 0) {
           // It's a group
-          console.log("it is a group");
           splitter.users.forEach((splitWith: User) => {
             if (!this.userExist(splitWith, sharedWithList)) {
               sharedWithList.push(this.convertUserToUserExpense(splitWith));
@@ -70,7 +76,6 @@ export class ExpenseService {
           });
         } else {
           // It's a user
-          console.log("it is a user");
           if (!this.userExist(splitter, sharedWithList)) {
             sharedWithList.push(this.convertUserToUserExpense(splitter));
           }
@@ -85,7 +90,6 @@ export class ExpenseService {
     money: Money,
     sharedWith: UserExpense[] = []
   ) {
-    console.log('1');
     switch (splitMethod) {
       case SPLIT_METHOD.EQUALLY:
         return this.distributeExpenseEqually(money, sharedWith);
@@ -94,16 +98,13 @@ export class ExpenseService {
   }
 
   distributeExpenseEqually(money: Money, sharedWith: UserExpense[]) {
-    console.log('2');
     const sharedWithLocal = JSON.parse(JSON.stringify(sharedWith));
     const selectedUsers = sharedWithLocal.filter(
       (userExpense: UserExpense) => userExpense.isSelected
     );
 
     if (money && money.value > 0 && sharedWithLocal.length > 0) {
-      console.log('3');
       sharedWithLocal.forEach((userExpense: UserExpense) => {
-        console.log('4');
         if (userExpense.isSelected) {
           userExpense.amount = parseFloat((money.value / selectedUsers.length).toFixed(2));
         } else {

@@ -44,7 +44,6 @@ export class Expense {
   [immerable] = true;
   id: ID = guid();
   paidBy: UserExpense[] = []; // There can be multiple users.
-  paidByMultiple: boolean = false;
   addedByEmailId?: string = ""; // LoggedIn user
   money: Money = new Money();
   description: string = "";
