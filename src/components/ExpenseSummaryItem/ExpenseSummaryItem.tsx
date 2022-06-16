@@ -16,7 +16,7 @@ const ExpenseSummaryItem: React.FC<any> = (props: ExpenseSummaryItemProps) => {
         <span className="mr-1">{youOwe ? "you owe" : "owes you"}</span>
         <span className="font-semibold">
           {currency}
-          {amount}
+          {amount.toFixed(2)}
         </span>
       </div>
     </div>

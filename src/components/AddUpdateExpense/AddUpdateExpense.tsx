@@ -19,6 +19,7 @@ import ChoosePayer from "../ChoosePayer";
 import { whichSplitMethod } from "../../utils/helpers";
 import ChooseSplitOptions from "../ChooseSplitOptions";
 import { react } from "@babel/types";
+import { useCoreService } from "../../services/core.service";
 
 type UserOrGroup = User | Group;
 
@@ -57,6 +58,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   const watchAmount = watch("amount");
   const watchDescription = watch("description");
   const watchTags = watch("tags");
+  const coreService = useCoreService();
 
   React.useEffect(() => {
     if (addedUser) {
@@ -158,9 +160,16 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     console.log("submit");
     console.log(data);
 
-    onAddExpense(expense);
-    // reset();
+    const result = expenseService.validateDistribution(expense.splitMethod, expense.sharedWith, expense.money);
+
+    if (result && result.isValid) {
+      onAddExpense(expense);
+    } else {
+      coreService.showError(result.msg);
+    }
   };
+
+
 
   return (
     <div className="flex items-center flex-col h-full w-full">

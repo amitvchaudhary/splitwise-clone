@@ -28,11 +28,11 @@ const ExpenseSummary: React.FC<any> = (props: ExpenseSummaryProps) => {
       </span>
       <span className="flex flex-col justify-center items-center">
         <div className="text-gray-600">you owe</div>
-        <div className="text-red-500">{Currency.INR.symbol}{youOwe}</div>
+        <div className="text-red-500">{Currency.INR.symbol}{youOwe.toFixed(2)}</div>
       </span>
       <span className="flex flex-col justify-center items-center">
         <div className="text-gray-600">you are owed</div>
-        <div className="text-teal-500">{Currency.INR.symbol}{youAreOwed}</div>
+        <div className="text-teal-500">{Currency.INR.symbol}{youAreOwed.toFixed(2)}</div>
       </span>
     </div>
   );

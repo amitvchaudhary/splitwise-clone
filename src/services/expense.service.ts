@@ -1,4 +1,3 @@
-
 import { expenseQuery } from "./../stores/expense/expense.query";
 import { SPLIT_METHOD } from "./../models/enums/core.enums";
 import {
@@ -9,7 +8,10 @@ import {
 } from "../models/classes/core.classes";
 import { authService, AuthService } from "./auth.service";
 import { expenseStore } from "../stores/expense/expense.store";
-import { ExpenseSummary, UserExpenseSummary } from "../models/classes/expense.classes";
+import {
+  ExpenseSummary,
+  UserExpenseSummary,
+} from "../models/classes/expense.classes";
 
 export class ExpenseService {
   private static instance: ExpenseService;
@@ -148,9 +150,7 @@ export class ExpenseService {
 
   getAllExpenses(): Expense[] {
     const loggedInUser: User | any = this._authService.getLoggedInUser();
-    return expenseQuery.getAll({
-      filterBy: [(entity) => entity.addedByEmailId === loggedInUser?.emailId],
-    });
+    return expenseQuery.getAll();
   }
 
   getExpenseSummary() {
@@ -172,7 +172,6 @@ export class ExpenseService {
             // You are owed
             if (expense.sharedWith && expense.sharedWith.length > 0) {
               expense.sharedWith.forEach((sharedWith: UserExpense) => {
-
                 // Except you (logged in user) all other people owe you
                 if (sharedWith.user.emailId !== loggedInUser.emailId) {
                   let userExpenseSummary = this.getUserExpenseSummary(
@@ -187,9 +186,16 @@ export class ExpenseService {
                   }
 
                   userExpenseSummary.expenses.push(expense);
-                  userExpenseSummary.totalAmount += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
-                  expenseSummary.youAreOwed += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
-                  
+                  userExpenseSummary.totalAmount += this.paidAmount(
+                    expense.splitMethod,
+                    expense.money,
+                    sharedWith.amount
+                  );
+                  expenseSummary.youAreOwed += this.paidAmount(
+                    expense.splitMethod,
+                    expense.money,
+                    sharedWith.amount
+                  );
                 }
               });
             }
@@ -215,8 +221,16 @@ export class ExpenseService {
                   }
 
                   userExpenseSummary.expenses.push(expense);
-                  userExpenseSummary.totalAmount += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
-                  expenseSummary.youOwe += this.paidAmount(expense.splitMethod, expense.money, sharedWith.amount);
+                  userExpenseSummary.totalAmount += this.paidAmount(
+                    expense.splitMethod,
+                    expense.money,
+                    sharedWith.amount
+                  );
+                  expenseSummary.youOwe += this.paidAmount(
+                    expense.splitMethod,
+                    expense.money,
+                    sharedWith.amount
+                  );
                 }
               });
             }
@@ -284,8 +298,44 @@ export class ExpenseService {
     return userLocal;
   }
 
-  deleteExpense(expense: any){
+  deleteExpense(expense: any) {
     expenseStore.remove(expense.id);
+  }
+
+  validateDistribution(
+    splitMethod: string,
+    sharedWith: UserExpense[] = [],
+    money: Money
+  ) {
+    let isValid = false;
+    let total = 0;
+    
+    if (
+      splitMethod === SPLIT_METHOD.EQUALLY ||
+      splitMethod === SPLIT_METHOD.EXACT_AMOUNT
+    ) {
+      sharedWith.forEach(
+        (sharedWith: UserExpense) => (total += sharedWith.amount)
+      );
+    } else if (splitMethod === SPLIT_METHOD.PERCENTAGE) {
+      sharedWith.forEach(
+        (sharedWith: UserExpense) =>
+          (total += this.getAmountByPercentage(money.value, sharedWith.amount))
+      );
+    }
+
+    if (Math.ceil(total) === Math.ceil(money.value)) {
+      isValid = true;
+    }
+
+    if (isValid) {
+      return { isValid: true, msg: "" };
+    } else {
+      return {
+        isValid: isValid,
+        msg: `The total amount ${total} doesn't match expense amount ${money.value}`,
+      };
+    }
   }
 }
 export const expenseService = ExpenseService.getInstance();
