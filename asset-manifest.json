@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/splitwise-clone/static/css/main.ded7a278.css",
-    "main.js": "/splitwise-clone/static/js/main.1fa90057.js",
+    "main.js": "/splitwise-clone/static/js/main.05c033fd.js",
     "static/js/787.c33c8061.chunk.js": "/splitwise-clone/static/js/787.c33c8061.chunk.js",
     "static/media/primeicons.svg": "/splitwise-clone/static/media/primeicons.c6e2053303524e39530c.svg",
     "static/media/primeicons.eot": "/splitwise-clone/static/media/primeicons.7fc4d8e224d1ff1b9c62.eot",
@@ -10,11 +10,11 @@
     "static/media/splitwise-logo.svg": "/splitwise-clone/static/media/splitwise-logo.4bc5c89569fce4a640293e7f02e7a56b.svg",
     "index.html": "/splitwise-clone/index.html",
     "main.ded7a278.css.map": "/splitwise-clone/static/css/main.ded7a278.css.map",
-    "main.1fa90057.js.map": "/splitwise-clone/static/js/main.1fa90057.js.map",
+    "main.05c033fd.js.map": "/splitwise-clone/static/js/main.05c033fd.js.map",
     "787.c33c8061.chunk.js.map": "/splitwise-clone/static/js/787.c33c8061.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ded7a278.css",
-    "static/js/main.1fa90057.js"
+    "static/js/main.05c033fd.js"
   ]
 }
