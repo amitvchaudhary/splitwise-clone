@@ -64,7 +64,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
     if (addedUser) {
       const usersAndGroupsLocal = getValues("usersAndGroups");
       if (!userExist(addedUser, usersAndGroupsLocal)) {
-        setValue("usersAndGroups", [...usersAndGroupsLocal, addedUser]);
+        setValue("usersAndGroups", [...usersAndGroupsLocal, addedUser], {shouldValidate: true});
       }
     }
   }, [addedUser?.id]);
@@ -159,6 +159,11 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   const onSubmit = (data: any) => {
     console.log("submit");
     console.log(data);
+
+    if (!expenseService.doesLoggedInUserExistInExpense(expense.paidBy, expense.sharedWith, expense.splitMethod)) {
+      coreService.showError("You must be involved in the transaction.");
+      return;
+    }
 
     const result = expenseService.validateDistribution(expense.splitMethod, expense.sharedWith, expense.money);
 

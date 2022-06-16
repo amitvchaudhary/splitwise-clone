@@ -14,8 +14,9 @@ const ChoosePayer: React.FC<any> = (props: ChoosePayerProps) => {
 
   const handlePaidBy = (user: UserExpense, amount: number) => {
     if (user) {
+      let userLocal = JSON.parse(JSON.stringify(user));
       updateExpense((draftExpense: Expense) => {
-        draftExpense.paidBy = [user];
+        draftExpense.paidBy = [userLocal];
         draftExpense.paidBy[0].amount = amount;
       });
       onClose();

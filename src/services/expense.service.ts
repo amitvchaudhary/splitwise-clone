@@ -309,7 +309,7 @@ export class ExpenseService {
   ) {
     let isValid = false;
     let total = 0;
-    
+
     if (
       splitMethod === SPLIT_METHOD.EQUALLY ||
       splitMethod === SPLIT_METHOD.EXACT_AMOUNT
@@ -336,6 +336,40 @@ export class ExpenseService {
         msg: `The total amount ${total} doesn't match expense amount ${money.value}`,
       };
     }
+  }
+
+  doesLoggedInUserExistInExpense(
+    paidBy: UserExpense[] = [],
+    sharedWith: UserExpense[] = [],
+    splitMethod: string
+  ) {
+    let exist = false;
+    const loggedInUser: User | any = this._authService.getLoggedInUser();
+
+    exist =
+      paidBy.findIndex(
+        (paidBy: UserExpense) => paidBy.user.emailId === loggedInUser.emailId
+      ) >= 0;
+
+    if (!exist) {
+      if (splitMethod === SPLIT_METHOD.EQUALLY) {
+        exist =
+          sharedWith.findIndex(
+            (sharedWith: UserExpense) =>
+              sharedWith.isSelected &&
+              sharedWith.user.emailId === loggedInUser.emailId
+          ) >= 0;
+      } else {
+        console.log(4);
+        exist =
+          sharedWith.findIndex(
+            (sharedWith: UserExpense) =>
+              sharedWith.user.emailId === loggedInUser.emaidId
+          ) >= 0;
+      }
+    }
+
+    return exist;
   }
 }
 export const expenseService = ExpenseService.getInstance();
