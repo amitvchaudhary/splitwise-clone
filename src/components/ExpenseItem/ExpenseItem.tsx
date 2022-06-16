@@ -13,6 +13,7 @@ type ExpenseItemProps = {
 
 const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
   const { expense, onDelete } = props;
+  const summary = expenseService.getExpenseBrief(expense);
   const handleDelete = (expense: Expense) => {
     onDelete(expense);
   };
@@ -44,16 +45,23 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
       </div>
       <div className="flex items-center">
         <div>
-          <div className="text-gray-500">
+          <div className="text-gray-500 flex justify-end">
             <span>{whoPaid(expense.paidBy)}</span>
             <span className="ml-1">paid</span>
           </div>
-          <div className="text-xl font-semibold">
+          <div className="text-xl font-semibold flex justify-end">
             <span>{Currency.INR.symbol}</span>
             <span>{paidAmount(expense)}</span>
           </div>
         </div>
-        <div></div>
+        <div className="ml-4 w-32">
+          <div className="text-gray-500 flex justify-start">
+            <span>{summary?.msg}</span>
+          </div>
+          <div className="text-xl font-semibold flex justify-start">
+            <span className={summary?.amountTextClass}>{summary?.amountText}</span>
+          </div>
+        </div>
         <div className="ml-4">
           <Button
             id="delete_btn"

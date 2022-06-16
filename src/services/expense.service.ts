@@ -1,5 +1,9 @@
+import { Currency } from './../models/constants/core.constants';
 import { expenseQuery } from "./../stores/expense/expense.query";
-import { SPLIT_METHOD } from "./../models/enums/core.enums";
+import {
+  SPLIT_METHOD,
+  USER_TRANSACTION_ACTION,
+} from "./../models/enums/core.enums";
 import {
   Expense,
   Money,
@@ -154,6 +158,7 @@ export class ExpenseService {
   }
 
   getExpenseSummary() {
+    // TODO: It can be improved further
     const loggedInUser: User | any = this._authService.getLoggedInUser();
     const expenses = this.getAllExpenses();
 
@@ -370,6 +375,78 @@ export class ExpenseService {
     }
 
     return exist;
+  }
+
+  getExpenseBrief(expense: Expense) {
+    // TODO: It can be improved further
+    const loggedInUser: User | any = this._authService.getLoggedInUser();
+    let total = 0;
+    let action;
+    let amountText;
+
+    if (expense.sharedWith && expense.sharedWith.length > 0) {
+      if (this.isPayer(loggedInUser, expense.paidBy)) {
+        // You are owed
+
+        expense.sharedWith.forEach((sharedWith: UserExpense) => {
+          // Except you (logged in user) all other people owe you
+          if (sharedWith.user.emailId !== loggedInUser.emailId) {
+            total += this.paidAmount(
+              expense.splitMethod,
+              expense.money,
+              sharedWith.amount
+            );
+          }
+        });
+
+        if (expense.sharedWith.length === 1) {
+          if (
+            expense.paidBy[0].user.emailId ===
+            expense.sharedWith[0].user.emailId
+          ) {
+            if (Math.ceil(expense.money.value) === Math.ceil(total)) {
+              action = "borrowed";
+              amountText = "nothing";
+            }
+          } else {
+            action = "lent";
+            amountText = Currency.INR.symbol + total;
+          }
+        } else {
+          action = "lent";
+          amountText = Currency.INR.symbol + total;
+        }
+
+        return {
+          msg: `you ${action}`,
+          amountText: amountText,
+          amountTextClass: "text-green-500 font-semibold",
+        };
+      } else {
+        expense.sharedWith.forEach((sharedWith: UserExpense) => {
+          // Except you (logged in user) all other people owe you
+          if (sharedWith.user.emailId === loggedInUser.emailId) {
+            total = this.paidAmount(
+              expense.splitMethod,
+              expense.money,
+              sharedWith.amount
+            );
+
+            if (total === 0) {
+              amountText = "nothing";
+            } else {
+              amountText = Currency.INR.symbol + total;
+            }
+          }
+        });
+
+        return {
+          msg: `${this.getPaidBy(expense.paidBy)} lent you`,
+          amountText: amountText,
+          amountTextClass: "text-red-500 font-semibold",
+        };
+      }
+    }
   }
 }
 export const expenseService = ExpenseService.getInstance();
