@@ -20,6 +20,7 @@ import { whichSplitMethod } from "../../utils/helpers";
 import ChooseSplitOptions from "../ChooseSplitOptions";
 import { react } from "@babel/types";
 import { useCoreService } from "../../services/core.service";
+import { authService } from "../../services/auth.service";
 
 type UserOrGroup = User | Group;
 
@@ -159,8 +160,7 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   const onSubmit = (data: any) => {
     console.log("submit");
     console.log(data);
-
-    if (!expenseService.doesLoggedInUserExistInExpense(expense.paidBy, expense.sharedWith, expense.splitMethod)) {
+    if (!expenseService.isUserInvolvedInExpense(loggedInUser, expense.paidBy, expense.sharedWith, expense.splitMethod)) {
       coreService.showError("You must be involved in the transaction.");
       return;
     }

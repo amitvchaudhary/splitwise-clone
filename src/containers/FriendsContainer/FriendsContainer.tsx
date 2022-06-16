@@ -2,23 +2,28 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import * as React from "react";
 import ExpenseList from "../../components/ExpenseList";
-import { Expense } from "../../models/classes/core.classes";
+import { Expense, User } from "../../models/classes/core.classes";
 import { useCoreService } from "../../services/core.service";
 import { expenseService } from "../../services/expense.service";
 import { expenseQuery } from "../../stores/expense/expense.query";
 import AddUpdateExpenseContainer from "../AddUpdateExpenseContainer";
 
-const ExpensesContainer: React.FC<any> = () => {
+type FriendsContainerProps = {
+  friend: User
+};
+
+const FriendsContainer: React.FC<any> = (props: FriendsContainerProps) => {
+  const {friend} = props;
   const [addExpenseDialog, setAddExpenseDialog] = React.useState(false);
   const [expenses, setExpenses] = React.useState<Expense[]>();
   const coreService = useCoreService();
 
   React.useEffect(() => {
     let subscription = expenseQuery.selectAll().subscribe(() => {
-      setExpenses(expenseService.getAllExpenses());
+      setExpenses(expenseService.getUserExpenses(friend));
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [friend?.id]);
 
   const handleAddExpense = () => {
     setAddExpenseDialog(true);
@@ -43,7 +48,7 @@ const ExpensesContainer: React.FC<any> = () => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between bg-gray-100 p-4">
-        <span className="font-semibold text-2xl">All Expenses</span>
+        <span className="font-semibold text-2xl capitalize">{friend?.name}</span>
         <span className="flex gap-x-2">
           <Button
             label="Add an expense"
@@ -58,7 +63,7 @@ const ExpensesContainer: React.FC<any> = () => {
         </span>
       </div>
       <div className="h-full w-full">
-        <ExpenseList expenses={expenses} onDelete={handleDeleteExpense}/>
+        <ExpenseList user={friend} expenses={expenses} onDelete={handleDeleteExpense}/>
       </div>
       <Dialog
         visible={addExpenseDialog}
@@ -73,4 +78,4 @@ const ExpensesContainer: React.FC<any> = () => {
   );
 };
 
-export default ExpensesContainer;
+export default FriendsContainer;

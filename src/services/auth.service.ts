@@ -36,22 +36,16 @@ export class AuthService {
     let user: any = userQuery.getEntity(signupVM.email.trim());
    
     if (user) {
-      console.log('exist===');
       user = JSON.parse(JSON.stringify(user));
       user.password = signupVM.password.trim();
       userStore.replace(user.emailId, user);
     } else {
-      console.log('creat new===');
-
       user = new User();
       user.emailId = signupVM.email.trim();
       user.name = signupVM.name.trim();
       user.password = signupVM.password.trim();
       userStore.add(user);
-    }
-
-// console.log(user);
-   
+    }   
   }
 
   setLoggedInUser(email: string) {

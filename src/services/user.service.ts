@@ -5,6 +5,7 @@ import { authService, AuthService } from './auth.service';
 import { Group, User } from '../models/classes/core.classes';
 import { userQuery } from './../stores/user/user.query';
 import { groupQuery } from '../stores/group/group.query';
+import { ID } from '@datorama/akita';
 export class UserService {
   private static instance: UserService;
   private _authService: AuthService;
@@ -27,6 +28,12 @@ export class UserService {
         (entity) => entity.addedByEmailId === loggedInUser?.emailId
       ]
     });
+  }
+
+  getUser(id: any) {
+    const users = this.getAllUsers();
+    const user = users.find((user: User) => user.id === id);
+    return user;
   }
 
   getAllGroups() {

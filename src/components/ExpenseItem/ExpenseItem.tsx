@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import * as React from "react";
 import Moment from "react-moment";
-import { Expense, UserExpense } from "../../models/classes/core.classes";
+import { Expense, User, UserExpense } from "../../models/classes/core.classes";
 import { Currency } from "../../models/constants/core.constants";
 import { SPLIT_METHOD } from "../../models/enums/core.enums";
 import { expenseService } from "../../services/expense.service";
@@ -9,11 +9,12 @@ import { expenseService } from "../../services/expense.service";
 type ExpenseItemProps = {
   expense: Expense;
   onDelete: Function;
+  user: User;
 };
 
 const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
-  const { expense, onDelete } = props;
-  const summary = expenseService.getExpenseBrief(expense);
+  const { expense, onDelete, user } = props;
+  const summary = expenseService.getExpenseBrief(expense, user);
   const handleDelete = (expense: Expense) => {
     onDelete(expense);
   };
@@ -34,7 +35,7 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
     <div className="h-18 bg-gray-100 hover:bg-green-50 m-2 rounded-lg py-2 flex justify-between">
       <div className="flex items-center">
         <span className="h-full w-16 flex flex-col items-center justify-center">
-          <div className="capitalize text-gray-500">
+          <div className="uppercase text-gray-500">
             <Moment format="MMM">{expense.createdAt}</Moment>
           </div>
           <div className="text-3xl font-semibold text-gray-500">

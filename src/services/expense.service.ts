@@ -1,4 +1,4 @@
-import { Currency } from './../models/constants/core.constants';
+import { Currency } from "./../models/constants/core.constants";
 import { expenseQuery } from "./../stores/expense/expense.query";
 import {
   SPLIT_METHOD,
@@ -154,7 +154,29 @@ export class ExpenseService {
 
   getAllExpenses(): Expense[] {
     const loggedInUser: User | any = this._authService.getLoggedInUser();
+
+    // TODO: Might need to filter based on user management.
     return expenseQuery.getAll();
+  }
+
+  getUserExpenses(user: User): Expense[] {
+    const loggedInUser: User | any = this._authService.getLoggedInUser();
+    const expenses = expenseQuery.getAll({
+      filterBy: [
+        (entity) =>
+          entity.addedByEmailId === loggedInUser?.emailId &&
+          this.isUserInvolvedInExpense(
+            user,
+            entity.paidBy,
+            entity.sharedWith,
+            entity.splitMethod
+          ),
+      ],
+    });
+
+    console.log(1);
+    console.log(expenses);
+    return expenses || [];
   }
 
   getExpenseSummary() {
@@ -343,41 +365,40 @@ export class ExpenseService {
     }
   }
 
-  doesLoggedInUserExistInExpense(
+  isUserInvolvedInExpense(
+    user: User,
     paidBy: UserExpense[] = [],
     sharedWith: UserExpense[] = [],
     splitMethod: string
   ) {
     let exist = false;
-    const loggedInUser: User | any = this._authService.getLoggedInUser();
+    if (user) {
+      exist =
+        paidBy.findIndex(
+          (paidBy: UserExpense) => paidBy.user.emailId === user.emailId
+        ) >= 0;
 
-    exist =
-      paidBy.findIndex(
-        (paidBy: UserExpense) => paidBy.user.emailId === loggedInUser.emailId
-      ) >= 0;
-
-    if (!exist) {
-      if (splitMethod === SPLIT_METHOD.EQUALLY) {
-        exist =
-          sharedWith.findIndex(
-            (sharedWith: UserExpense) =>
-              sharedWith.isSelected &&
-              sharedWith.user.emailId === loggedInUser.emailId
-          ) >= 0;
-      } else {
-        console.log(4);
-        exist =
-          sharedWith.findIndex(
-            (sharedWith: UserExpense) =>
-              sharedWith.user.emailId === loggedInUser.emaidId
-          ) >= 0;
+      if (!exist) {
+        if (splitMethod === SPLIT_METHOD.EQUALLY) {
+          exist =
+            sharedWith.findIndex(
+              (sharedWith: UserExpense) =>
+                sharedWith.isSelected &&
+                sharedWith.user.emailId === user.emailId
+            ) >= 0;
+        } else {
+          exist =
+            sharedWith.findIndex(
+              (sharedWith: UserExpense) =>
+                sharedWith.user.emailId === user.emailId
+            ) >= 0;
+        }
       }
     }
-
     return exist;
   }
 
-  getExpenseBrief(expense: Expense) {
+  getExpenseBrief(expense: Expense, user?: User) {
     // TODO: It can be improved further
     const loggedInUser: User | any = this._authService.getLoggedInUser();
     let total = 0;
@@ -389,14 +410,21 @@ export class ExpenseService {
         // You are owed
 
         expense.sharedWith.forEach((sharedWith: UserExpense) => {
-          // Except you (logged in user) all other people owe you
-          if (sharedWith.user.emailId !== loggedInUser.emailId) {
-            total += this.paidAmount(
-              expense.splitMethod,
-              expense.money,
-              sharedWith.amount
-            );
+
+          if (sharedWith.user.emailId === loggedInUser.emailId) {
+            return;
           }
+
+          if (user && user.emailId === sharedWith.user.emailId) {
+            return;
+          }
+
+          total += this.paidAmount(
+            expense.splitMethod,
+            expense.money,
+            sharedWith.amount
+          );
+
         });
 
         if (expense.sharedWith.length === 1) {
@@ -424,7 +452,7 @@ export class ExpenseService {
         };
       } else {
         expense.sharedWith.forEach((sharedWith: UserExpense) => {
-          // Except you (logged in user) all other people owe you
+          // Only you owe
           if (sharedWith.user.emailId === loggedInUser.emailId) {
             total = this.paidAmount(
               expense.splitMethod,
