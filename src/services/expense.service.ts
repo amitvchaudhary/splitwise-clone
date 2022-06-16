@@ -407,21 +407,25 @@ export class ExpenseService {
         // You are owed
 
         expense.sharedWith.forEach((sharedWith: UserExpense) => {
-
           if (sharedWith.user.emailId === loggedInUser.emailId) {
             return;
           }
 
-          if (user && user.emailId === sharedWith.user.emailId) {
-            return;
+          if (user) {
+            if (user.emailId === sharedWith.user.emailId) {
+              total = this.paidAmount(
+                expense.splitMethod,
+                expense.money,
+                sharedWith.amount
+              );
+            }
+          } else {
+            total += this.paidAmount(
+              expense.splitMethod,
+              expense.money,
+              sharedWith.amount
+            );
           }
-
-          total += this.paidAmount(
-            expense.splitMethod,
-            expense.money,
-            sharedWith.amount
-          );
-
         });
 
         if (expense.sharedWith.length === 1) {
