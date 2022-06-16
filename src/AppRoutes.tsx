@@ -18,7 +18,7 @@ function ProtectedRoute({ children }: any) {
 export const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<App />}>
+      <Route index={false} element={<App />}>
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="signup" element={<SignupPage />}></Route>
           <Route path="signin" element={<SigninPage />}></Route>
@@ -66,12 +66,13 @@ export const AppRoutes = () => {
               }
             />
           </Route>
-          <Route
-            path="*"
-            element={<Navigate to="/auth/signup"></Navigate>}
-          ></Route>
         </Route>
+       
       </Route>
+       <Route
+          path="*"
+          element={<Navigate to="/auth/signin"></Navigate>}
+        ></Route>
     </Routes>
   );
 };
