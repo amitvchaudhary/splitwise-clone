@@ -19,7 +19,7 @@ const FriendPage: React.FC<any> = () => {
   }, [id])
 
   
-  return <div className="h-full w-full">
+  return <div className="h-full w-full dark:bg-slate-700">
     <FriendsContainer friend={friend}/>
   </div>;
 };

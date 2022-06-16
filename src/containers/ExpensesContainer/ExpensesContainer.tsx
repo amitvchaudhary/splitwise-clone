@@ -41,8 +41,8 @@ const ExpensesContainer: React.FC<any> = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between bg-gray-100 p-4">
-        <span className="font-semibold text-2xl">All Expenses</span>
+      <div className="flex items-center justify-between dark:bg-slate-700 bg-gray-100 dar p-4">
+        <span className="font-semibold text-2xl dark:text-white">All Expenses</span>
         <span className="flex gap-x-2">
           <Button
             label="Add an expense"

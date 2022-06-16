@@ -32,7 +32,7 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
   };
 
   return (
-    <div className="h-18 bg-gray-100 hover:bg-green-50 m-2 rounded-lg py-2 flex justify-between">
+    <div className="h-18 bg-gray-100 dark:bg-slate-300 hover:bg-green-50 m-2 rounded-lg py-2 flex justify-between">
       <div className="flex items-center">
         <span className="h-full w-16 flex flex-col items-center justify-center">
           <div className="uppercase text-gray-500">

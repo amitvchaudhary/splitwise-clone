@@ -40,9 +40,9 @@ const DashboardContainer: React.FC<any> = () => {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between bg-gray-100 p-4">
-        <span className="font-semibold text-2xl">Dashboard</span>
+    <div className="h-full">
+      <div className="flex items-center justify-between bg-gray-100 dark:text-white dark:bg-slate-700 p-4">
+        <span className="font-semibold text-2xl dark:text-white">Dashboard</span>
         <span className="flex gap-x-2">
           <Button
             label="Add an expense"

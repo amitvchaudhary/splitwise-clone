@@ -1,7 +1,7 @@
 import { akitaDevtools, persistState, resetStores } from "@datorama/akita";
 import React, { createContext, useContext, useRef } from "react";
 import SimpleCrypto from "simple-crypto-js";
-import { globalStore } from "../stores/global";
+import { globalQuery, globalStore } from "../stores/global";
 import { userStore } from "../stores/user/user.store";
 import { Toast } from 'primereact/toast';
 import { groupStore } from "../stores/group/group.store";
@@ -53,7 +53,7 @@ export const CoreServiceProvider = (props: any) => {
     //   },
     });
 
-    globalStore.update({isLoading: true});
+    globalStore.update({isLight: false});
     userStore.update([]);
     groupStore.update([]);
     expenseStore.update([]);
@@ -86,13 +86,25 @@ export const CoreServiceProvider = (props: any) => {
     toast.current.show({severity: "success", summary: "Success", detail: message});  
   }
 
+  const toggleTheme = () => {
+    globalStore.update(state => ({
+      isLight: !state.isLight
+    }));
+  }
+
+  const selectTheme = () => {
+    return globalQuery.select(state => state.isLight);
+  }
+
   operationsAllowed = {
     setupApplication,
     tearDownApplication,
     showError,
     showWarning,
     showInfo,
-    showSuccess
+    showSuccess,
+    toggleTheme,
+    selectTheme
   };
 
   return (

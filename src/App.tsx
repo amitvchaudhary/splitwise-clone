@@ -1,15 +1,25 @@
 import "./App.css";
 import { Outlet } from "react-router";
-// import { globalStore } from "./stores/global";
-// import { userStore } from "./stores/user/user.store";
-// import { User } from "./models/classes/core.classes";
 import { useCoreService } from "./services/core.service";
+import { useEffect, useState } from "react";
 
 function App() {
   const coreService = useCoreService();
   coreService.setupApplication();
 
-  return <Outlet />;
+  useEffect(() => {
+    let subscription = coreService.selectTheme().subscribe((isLightTheme: boolean) => {
+      if (isLightTheme) {
+        document.documentElement.classList.remove('dark')
+      } else {
+        document.documentElement.classList.add('dark')
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  return <div><Outlet /></div>;
 }
 
 export default App;

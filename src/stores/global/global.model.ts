@@ -1,9 +1,9 @@
 export interface GlobalState {
-  isLoading: boolean;
+  isLight: boolean;
 }
 
 export function createInitialState(): GlobalState {
   return {
-    isLoading: false,
+    isLight: true
   };
 }

@@ -16,7 +16,7 @@ const NavItem: React.FC<any> = (props: NavItemProps) => {
           className={
             isActive
               ? "text-teal-500 font-semibold border-l-8 pl-2 border-teal-500"
-              : "text-gray-700 font-semibold border-l-8 pl-2 border-transparent"
+              : "text-gray-700 font-semibold border-l-8 pl-2 dark:text-white border-transparent"
           }
         >
           {children}

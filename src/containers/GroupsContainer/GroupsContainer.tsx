@@ -46,8 +46,8 @@ const GroupsContainer: React.FC<any> = (props: GroupsContainerProps) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between bg-gray-100 p-4">
-        <span className="font-semibold text-2xl capitalize">{group?.name}</span>
+      <div className="flex items-center justify-between dark:bg-slate-700 bg-gray-100 p-4">
+        <span className="font-semibold text-2xl capitalize dark:text-white">{group?.name}</span>
         <span className="flex gap-x-2">
           <Button
             label="Add an expense"
