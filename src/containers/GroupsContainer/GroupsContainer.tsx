@@ -62,7 +62,7 @@ const GroupsContainer: React.FC<any> = (props: GroupsContainerProps) => {
           />
         </span>
       </div>
-      <div className="h-full w-full flex items-center justify-center text-gray-500 font-semibold">
+      <div className="text-3xl h-full w-full flex items-center justify-center text-gray-500 font-semibold">
         Under construction.
         {/* <ExpenseList user={group} expenses={expenses} onDelete={handleDeleteExpense}/> */}
       </div>

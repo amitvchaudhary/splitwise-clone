@@ -55,7 +55,7 @@ const ExpenseItem: React.FC<any> = (props: ExpenseItemProps) => {
             <span>{paidAmount(expense)}</span>
           </div>
         </div>
-        <div className="ml-4 w-32">
+        <div className="ml-4 w-40">
           <div className="text-gray-500 flex justify-start">
             <span>{summary?.msg}</span>
           </div>
