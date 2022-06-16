@@ -45,6 +45,12 @@ export class UserService {
     });
   }
 
+  getGroup(id: any) {
+    const groups = this.getAllGroups();
+    const group = groups.find((group: Group) => group.id === id);
+    return group;
+  }
+
   selectAllUsers() {
     const loggedInUser: any = this._authService.getLoggedInUser();
     return userQuery.selectAll({
