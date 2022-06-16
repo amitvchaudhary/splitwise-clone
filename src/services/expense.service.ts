@@ -174,8 +174,6 @@ export class ExpenseService {
       ],
     });
 
-    console.log(1);
-    console.log(expenses);
     return expenses || [];
   }
 
@@ -232,7 +230,6 @@ export class ExpenseService {
               expense.sharedWith.forEach((sharedWith: UserExpense) => {
                 // Except you (logged in user) all other people owe you
                 if (sharedWith.user.emailId === loggedInUser.emailId) {
-                  console.log("1");
                   // Considering only one user pays. Need to update code in future if there can be multiple payers.
                   // expense.paidBy[0].user will get changed.
                   const payer = expense.paidBy[0].user;

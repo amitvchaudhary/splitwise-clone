@@ -39,7 +39,6 @@ const GroupsContainer: React.FC<any> = (props: GroupsContainerProps) => {
   };
 
   const handleDeleteExpense = (expense: Expense) => {
-    console.log('cccc');
     if (expense) {
       expenseService.deleteExpense(expense);
     }

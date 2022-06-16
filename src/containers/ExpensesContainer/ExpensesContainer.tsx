@@ -34,7 +34,6 @@ const ExpensesContainer: React.FC<any> = () => {
   };
 
   const handleDeleteExpense = (expense: Expense) => {
-    console.log('cccc');
     if (expense) {
       expenseService.deleteExpense(expense);
     }

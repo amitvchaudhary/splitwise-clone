@@ -158,8 +158,6 @@ const AddUpdateExpense: React.FC<any> = (props: AddUpdateExpenseProps) => {
   };
 
   const onSubmit = (data: any) => {
-    console.log("submit");
-    console.log(data);
     if (!expenseService.isUserInvolvedInExpense(loggedInUser, expense.paidBy, expense.sharedWith, expense.splitMethod)) {
       coreService.showError("You must be involved in the transaction.");
       return;

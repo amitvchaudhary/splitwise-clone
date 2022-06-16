@@ -12,8 +12,6 @@ const SplitEqually: React.FC<any> = (props: SplitEquallyProps) => {
   const { expense, updateExpense } = props;
 
   const handleSelectUser = (index: number) => {
-    console.log(index);
-    console.log(expense);
     updateExpense((draft: Expense) => {
       draft.sharedWith[index].isSelected = !draft.sharedWith[index].isSelected;
       const updatedList = expenseService.distributeExpense(expense.splitMethod, draft.money, draft.sharedWith);

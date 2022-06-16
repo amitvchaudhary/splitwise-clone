@@ -20,10 +20,8 @@ const DashboardContainer: React.FC<any> = () => {
 
   React.useEffect(() => {
     let subscription = expenseQuery.selectAll().subscribe(() => {
-      console.log("subs called ---");
 
       setExpenseSummary(expenseService.getExpenseSummary());
-      console.log(expenseSummary);
     });
     return () => subscription.unsubscribe();
   }, []);

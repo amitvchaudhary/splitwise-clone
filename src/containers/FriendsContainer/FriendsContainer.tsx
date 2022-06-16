@@ -39,7 +39,6 @@ const FriendsContainer: React.FC<any> = (props: FriendsContainerProps) => {
   };
 
   const handleDeleteExpense = (expense: Expense) => {
-    console.log('cccc');
     if (expense) {
       expenseService.deleteExpense(expense);
     }

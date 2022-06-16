@@ -21,10 +21,7 @@ const AddUpdateFriend: React.FC<any> = (props: AddUpdateFriendProps) => {
   const { onAddFriend, name = ""} = props;
 
   const onSubmit = (data: any, e: any) => {
-    console.log('event ');
-    console.log(e);
     onAddFriend(data);
-    e.nativeEvent.stopImmediatePropagation();
   };
 
   const getFormErrorMessage = (name: any) => {
